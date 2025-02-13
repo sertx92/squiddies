@@ -1,0 +1,287 @@
+button:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-bottom: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+    transform: translateY(2px);
+  }
+  
+  /* Pulsante Show Filters / Toggle Button */
+  .toggle-btn {
+    width: 100%;
+    padding: 6px;
+    font-size: 14px;
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  /* Stili generali */
+  body {
+    background-color: #008080;
+    margin: 0;
+    padding: 20px;
+    font-family: Courier, monospace;
+    font-size: 12px;
+  }
+  .layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .filter-window {
+    width: 300px;
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    padding: 10px;
+    font-size: 14px;
+    color: #000;
+  }
+  .filter-window h2 {
+    margin-top: 0;
+    font-size: 16px;
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+  }
+  details.filter-group {
+    margin-bottom: 10px;
+    padding: 4px;
+    background-color: #c0c0c0;
+    border: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+  }
+  details.filter-group summary {
+    cursor: pointer;
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+    font-size: 14px;
+    outline: none;
+    list-style: none;
+  }
+  details.filter-group summary::-webkit-details-marker {
+    display: none;
+  }
+  details.filter-group label {
+    display: block;
+    margin-left: 10px;
+    padding: 2px 0;
+  }
+  .window {
+    flex: 1;
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+  }
+  .window-titlebar {
+    background-color: #000080;
+    color: #fff;
+    height: 26px;
+    line-height: 20px;
+    padding: 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-btn {
+    background-color: #c0c0c0;
+    width: 16px;
+    height: 16px;
+    border: 2px outset #c0c0c0;
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    line-height: 16px;
+  }
+  .window-content {
+    padding: 10px;
+    background-color: #c0c0c0;
+  }
+  .search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  #search {
+    flex: 1;
+    max-width: 400px;
+    padding: 4px 8px;
+    font-size: 14px;
+    border: 2px inset #c0c0c0;
+    color: #000;
+  }
+  #shuffle,
+  #removeFilters {
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    font-family: Courier, monospace;
+    font-size: 14px;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+  #shuffle:active,
+  #removeFilters:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-bottom: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+  }
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+    gap: 16px;
+  }
+  .card {
+    overflow: hidden;
+  }
+  .preview {
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-bottom: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+  }
+  .preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .card-id {
+    text-align: center;
+    padding: 5px;
+    background-color: #c0c0c0;
+  }
+  .card-id button.details-btn {
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    font-family: Courier, monospace;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .windows-button {
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .modal-window {
+    margin: 5% auto;
+    width: 80%;
+    max-height: 90%;
+    overflow-y: auto;
+  }
+  .modal-body {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+  }
+  .modal-left, .modal-right {
+    flex: 1;
+  }
+  .modal-left .preview {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  .modal-right {
+    overflow-y: auto;
+    padding: 5px;
+  }
+  .metadata-item {
+    border-bottom: 1px solid #888;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+  }
+  .metadata-item h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #000;
+    font-weight: normal;
+  }
+  .metadata-item p {
+    margin: 2px 0 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  /* Filtri attivi (chip) */
+  .active-filter-chip {
+    background-color: #c0c0c0;
+    border: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    border-top: 2px solid #ffffff;
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 4px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .active-filter-chip:active {
+    transform: translateY(2px);
+  }
+  /* Paginazione */
+  #pagination {
+    margin-top: 10px;
+    text-align: center;
+  }
+  #pagination button {
+    background-color: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #404040;
+    border-right: 2px solid #404040;
+    font-family: "MS Sans Serif", Tahoma, sans-serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  #pagination button:active {
+    transform: translateY(2px);
+  }
+  #pageInfo {
+    font-family: Courier, monospace;
+    font-size: 14px;
+  }
+  

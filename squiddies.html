@@ -1,0 +1,4653 @@
+<!doctype html>
+<html>
+  <head>
+
+    <script src="https://ordinals.com/content/13a5c8e41dfc110514b450b2f15317988c0aaf276d3dbdcca9aa3c7d0b2188a7i0"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background-color: #000;
+      }
+      canvas {
+        width: 100%;
+        height: auto;
+        max-width: 100vmin;
+        max-height: 100vmin;
+        display: block;
+        margin: auto;
+      }
+      #info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+    let speedProfiles = [
+  { name: "fast", probability: 0.08, speedValue: 10 },
+  { name: "medium", probability: 0.4, speedValue: 8 },
+  { name: "slow", probability: 0.4, speedValue: 5 },
+  { name: "very_slow", probability: 0.08, speedValue: 3 }
+];
+
+let colorProfiles = [
+  {
+    name: "classic",
+    probability: 0.14,
+    canvasBg: "#008080",
+    sod: "#003366", 
+    bgColor: "#c0c0c0",
+    borderHi: "#ffffff",
+    borderLo: "#404040",
+    titleBar: "#000080",
+    closeBtn: "#800000",
+        winText: "#000080",
+
+    bodyElement1: "#000080",
+    bodyElement2: "#800000",
+    extraBorderColor: "#ffffff",
+    bckelement1: "#008080",
+    bckelement2: "#000080",
+    bckstyle1: "#000080",
+    bckstyle2: "#008080",
+    compatibleStyles: ["win98"],
+    sotText: "#ffffff",
+    posterizationValues: [4, 6, 9, 12] 
+
+  },
+  {
+  "name": "cinv",
+  "probability": 0.01,
+  "canvasBg": "#ff5555",
+  "sod": "#ffff55",
+  "bgColor": "#242424",
+  "borderHi": "#242424",
+  "borderLo": "#ff5555",
+  "titleBar": "#ffff55",
+  "closeBtn": "#7fffff",
+      "winText": "#ffff55",
+  "bodyElement1": "#7fffff",
+  "bodyElement2": "#ffff7f",
+  "extraBorderColor": "#242424",
+  "bckelement1": "#ff5555",
+  "bckelement2": "#ffff55",
+  "bckstyle1": "#ffff55",
+  "bckstyle2": "#ff5555",
+  "sotText": "#242424",
+  "compatibleStyles": ["win98"],
+  posterizationValues: [3,5]  
+
+}, 
+  {
+    name: "BW",
+    probability: 0.02,
+    canvasBg: "#ffffff",
+    sod: "#999999",
+    bgColor: "#ffffff",
+    borderHi: "#000000",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#000000",
+        winText: "#000000",
+
+    bodyElement1: "#000000",
+    bodyElement2: "#000000",
+    extraBorderColor: "#000000",
+    bckelement1: "#000000",
+    bckelement2: "#ffffff",
+    bckstyle1: "#000000",
+    bckstyle2: "#ffffff",
+    compatibleStyles: ["win98"],
+    sotText: "#000000",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+   {
+    name: "WB",
+    probability: 0.03,
+    canvasBg: "#000000",
+    sod: "#000000",
+    bgColor: "#000000",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#000000",
+        winText: "#ffffff",
+
+    bodyElement1: "#ffffff",
+    bodyElement2: "#ffffff",
+    extraBorderColor: "#000000",
+    bckelement1: "#ffffff",
+    bckelement2: "#000000",
+    bckstyle1: "#ffffff",
+    bckstyle2: "#000000",
+    compatibleStyles: ["win98"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+  {
+  name: "cyb",
+  probability: 0.09,
+  canvasBg: "#1A1A1A",       
+  sod: "#1F0B3D",            
+  bgColor: "#121212",        
+  borderHi: "#bc07c7",       
+  borderLo: "#500550",       
+  titleBar: "#00FFFF",       
+  closeBtn: "#FF4500",       
+    winText: "#00FFFF",       
+
+  bodyElement1: "#bc07c7",   
+  bodyElement2: "#00FFFF",   
+  extraBorderColor: "#FF69B4", 
+  bckelement1: "#3e093e",
+  bckelement2: "#960b9e",
+  bckstyle1: "#3e093e",
+  bckstyle2: "#960b9e",
+  compatibleStyles: ["win98"],
+  sotText: "#bc07c7",
+    posterizationValues: [3, 6, 9]  
+
+},
+{
+  name: "acid",
+  probability: 0.09,
+  canvasBg: "#c8de9b",    
+  sod: "#040c06",         
+  bgColor: "#eeffcc",     
+  borderHi: "#305d42",    
+  borderLo: "#112318",    
+  titleBar: "#112318",    
+  closeBtn: "#1e3a29",    
+  winText: "#112318",
+  bodyElement1: "#bedc7f", 
+  bodyElement2: "#112318", 
+  extraBorderColor: "#1e3a29",  
+  bckelement1: "#eeffcc", 
+  bckelement2: "#89a257", 
+  bckstyle1: "#eeffcc",   
+  bckstyle2: "#89a257",   
+  compatibleStyles: ["win98"],
+  sotText: "#eeffcc",     
+  posterizationValues: [9,12]
+},
+  {
+    name: "rsand",
+    probability: 0.08,
+    canvasBg: "#09122C",  
+    sod: "#09122C",       
+    bgColor: "#09122C",   
+    borderHi: "#E17564",  
+    borderLo: "#BE3144",  
+    titleBar: "#872341",  
+    closeBtn: "#BE3144",  
+        winText: "#872341",  
+
+    bodyElement1: "#E17564", 
+    bodyElement2: "#BE3144", 
+    extraBorderColor: "#872341",  
+    bckelement1: "#09122C",
+    bckelement2: "#63132b",
+    bckstyle1: "#09122C",
+    bckstyle2: "#872341",
+    compatibleStyles: ["win98"],
+    sotText: "#E17564",
+          posterizationValues: [4, 6, 9,12]  
+
+  },
+  {
+    name: "sset",
+    probability: 0.09,
+    canvasBg: "#F9ED69",  
+    sod: "#B83B5E",       
+    bgColor: "#F08A5D",   
+    borderHi: "#B83B5E",  
+    borderLo: "#6A2C70",  
+    titleBar: "#B83B5E",  
+
+    closeBtn: "#6A2C70",  
+        winText: "#B83B5E",  
+
+    bodyElement1: "#F08A5D", 
+    bodyElement2: "#B83B5E", 
+    extraBorderColor: "#6A2C70",  
+    bckelement1: "#F9ED69",
+    bckelement2: "#F08A5D",
+    bckstyle1: "#B83B5E",
+    bckstyle2: "#6A2C70",
+    compatibleStyles: ["win98"],
+    sotText: "#F08A5D",
+      posterizationValues: [4, 6, 9]  
+
+  },
+  {
+    name: "fire",
+    probability: 0.08,
+    canvasBg: "#11070a",  
+    sod: "#11070a",
+    bgColor: "#ff2a00",    
+    borderHi: "#ffc200",
+    borderLo: "#ffc200",
+    titleBar: "#ffc200",
+    closeBtn: "#ffc200",
+    winText: "#fffcfe",
+    extraBorderColor: "#ffc200",
+    bodyElement1: "#fffcfe",
+    bodyElement2: "#fffcfe",
+    bckelement1: "#ffc200",
+    bckelement2: "#ff2a00",
+    bckstyle1: "#ff2a00",
+    bckstyle2: "#11070a",
+    compatibleStyles: ["win98"],
+    sotText: "#fffcfe",
+  posterizationValues: [2,4,6,9]  
+
+  },
+  {
+  name: "oc",
+  probability: 0.08,
+  canvasBg: "#0d2b45",
+  sod: "#0d2b45",
+  bgColor: "#ffd4a3",
+  borderHi: "#8d697a",
+  borderLo: "#544e68",
+  titleBar: "#ffaa5e",
+  closeBtn: "#8d697a",
+  winText: "#0d2b45",
+  extraBorderColor: "#8d697a",
+  bodyElement1: "#d08159",
+  bodyElement2: "#8d697a",
+  bckelement1: "#d08159",
+  bckelement2: "#ffaa5e",
+  bckstyle1: "#203c56",
+  bckstyle2: "#8d697a",
+  compatibleStyles: ["win98"],
+  sotText: "#ffaa5e",
+  posterizationValues: [4, 6, 9, 12]  
+
+},
+  {
+  name: "office",
+  probability: 0.09,
+  canvasBg: "#c0b89b",
+  sod: "#31353f",
+  bgColor: "#c0b89b",
+  borderHi: "#9b2202",
+  borderLo: "#701c06",
+  titleBar: "#701c06",
+  closeBtn: "#7c7f82",
+  winText: "#701c06",
+  extraBorderColor: "#701c06",
+  bodyElement1: "#f4f5f4",
+  bodyElement2: "#701c06",
+  bckelement1: "#701c06",
+  bckelement2: "#c0b89b",
+  bckstyle1: "#c0b89b",
+  bckstyle2: "#9b2202",
+  compatibleStyles: ["win98"],
+  sotText: "#f4f5f4",
+  posterizationValues: [6, 9, 12]
+},
+ {
+  name: "bitcoinBright",
+  probability: 0.08,
+  canvasBg: "#f2a900",         
+  sod: "#270200",              
+  bgColor: "#401a00",          
+  borderHi: "#f7931a",         
+  borderLo: "#cc6600",         
+  titleBar: "#f7931a",         
+  closeBtn: "#270200",         
+  winText: "#f2a900",          
+  extraBorderColor: "#f7931a", 
+  bodyElement1: "#ffffff",     
+  bodyElement2: "#f7931a",     
+  bckelement1: "#f7931a",      
+  bckelement2: "#784500",      
+  bckstyle1: "#401a00",        
+  bckstyle2: "#784500",        
+  compatibleStyles: ["win98"],
+  sotText: "#f9a825",          
+  posterizationValues: [4, 6, 9, 12]
+},
+  {
+  name: "fsion",
+  probability: 0.09,
+  canvasBg: "#ff166a",       
+  sod: "#121126",            
+  bgColor: "#121126",        
+  borderHi: "#32ffaf",       
+  borderLo: "#32ffaf",       
+  titleBar: "#32ffaf",       
+  closeBtn: "#121126",       
+  winText: "#32ffaf",        
+  extraBorderColor: "#32ffaf", 
+  bodyElement1: "#32ffaf",   
+  bodyElement2: "#32ffaf",   
+  bckelement1: "#32ffaf",    
+  bckelement2: "#ff166a",    
+  bckstyle1: "#121126",      
+  bckstyle2: "#ff166a",      
+  compatibleStyles: ["win98"],
+  sotText: "#32ffaf",        
+  posterizationValues: [4, 6, 9, 12]
+},
+  {
+  name: "dsert",
+  probability: 0.03,
+  canvasBg: "#b2453d",       
+  sod: "#241b1d",            
+  bgColor: "#f6db8d",        
+  borderHi: "#5f778c",       
+  borderLo: "#241b1d",       
+  titleBar: "#c17653",       
+  closeBtn: "#b2453d",       
+  winText: "#b2453d",        
+  extraBorderColor: "#d7feff",
+  bodyElement1: "#c17653",     
+  bodyElement2: "#c17653",     
+  bckelement1: "#f6db8d",      
+  bckelement2: "#b2453d",      
+  bckstyle1: "#241b1d",        
+  bckstyle2: "#b2453d",        
+  compatibleStyles: ["win98"],
+  sotText: "#f6db8d",         
+  posterizationValues: [4, 6, 9, 12]
+},
+
+  {
+    name: "classic",
+    probability: 0.15,
+    canvasBg: "#ffffff",
+    sod: "#999999",
+    bgColor: "#ffffff",
+    borderHi: "#000000",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#000000",
+        winText: "#000000",
+
+    bodyElement1: "#000000",
+    bodyElement2: "#000000",
+    extraBorderColor: "#000000",
+    bckelement1: "#000000",
+    bckelement2: "#ffffff",
+    bckstyle1: "#000000",
+    bckstyle2: "#ffffff",
+    compatibleStyles: ["appleLisa"],
+    sotText: "#000000",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+  {
+    name: "WB",
+    probability: 0.06,
+    canvasBg: "#000000",
+    sod: "#000000",
+    bgColor: "#000000",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#000000",
+    closeBtn: "#ffffff",
+        winText: "#ffffff",
+
+    bodyElement1: "#ffffff",
+    bodyElement2: "#ffffff",
+    extraBorderColor: "#000000",
+    bckelement1: "#ffffff",
+    bckelement2: "#000000",
+    bckstyle1: "#ffffff",
+    bckstyle2: "#000000",
+    compatibleStyles: ["appleLisa"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+   {
+  name: "cyb",
+  probability: 0.08,
+  canvasBg: "#1A1A1A",       
+  sod: "#1F0B3D",            
+  bgColor: "#121212",        
+  borderHi: "#bc07c7",       
+  borderLo: "#500550",       
+  titleBar: "#00FFFF",       
+  closeBtn: "#121212",       
+    winText: "#00FFFF",       
+
+  bodyElement1: "#bc07c7",   
+  bodyElement2: "#00FFFF",   
+  extraBorderColor: "#FF69B4", 
+  bckelement1: "#3e093e",
+  bckelement2: "#00FFFF",
+  bckstyle1: "#3e093e",
+  bckstyle2: "#960b9e",
+  compatibleStyles: ["appleLisa"],
+  sotText: "#bc07c7",
+    posterizationValues: [6, 9, 12]  
+
+},
+  {
+    name: "fire",
+    probability: 0.07,
+    canvasBg: "#11070a",  
+    sod: "#11070a",
+    bgColor: "#ff2a00",    
+    borderHi: "#ffc200",
+    borderLo: "#ffc200",
+    titleBar: "#ffc200",
+    closeBtn: "#11070a",
+    winText: "#fffcfe",
+    extraBorderColor: "#ffc200",
+    bodyElement1: "#ffc200",
+    bodyElement2: "#ffc200",
+    bckelement1: "#ffc200",
+    bckelement2: "#ff2a00",
+    bckstyle1: "#ff2a00",
+    bckstyle2: "#11070a",
+    compatibleStyles: ["appleLisa"],
+    sotText: "#fffcfe",
+  posterizationValues: [2,4,6,9]  
+
+  },
+   {
+  name: "office",
+  probability: 0.08,
+  canvasBg: "#c0b89b",
+  sod: "#31353f",
+  bgColor: "#c0b89b",
+  borderHi: "#9b2202",
+  borderLo: "#701c06",
+  titleBar: "#701c06",
+  closeBtn: "#c0b89b",
+  winText: "#701c06",
+  extraBorderColor: "#701c06",
+  bodyElement1: "#f4f5f4",
+  bodyElement2: "#701c06",
+  bckelement1: "#701c06",
+  bckelement2: "#c0b89b",
+  bckstyle1: "#c0b89b",
+  bckstyle2: "#9b2202",
+    compatibleStyles: ["appleLisa"],
+  sotText: "#f4f5f4",
+  posterizationValues: [6, 9, 12]
+},
+   {
+  name: "oc",
+  probability: 0.09,
+  canvasBg: "#0d2b45",
+  sod: "#0d2b45",
+  bgColor: "#ffd4a3",
+  borderHi: "#8d697a",
+  borderLo: "#544e68",
+  titleBar: "#ffaa5e",
+  closeBtn: "#0d2b45",
+  winText: "#0d2b45",
+  extraBorderColor: "#8d697a",
+  bodyElement1: "#d08159",
+  bodyElement2: "#8d697a",
+  bckelement1: "#d08159",
+  bckelement2: "#ffaa5e",
+  bckstyle1: "#203c56",
+  bckstyle2: "#8d697a",
+    compatibleStyles: ["appleLisa"],
+  sotText: "#ffaa5e",
+  posterizationValues: [4, 6, 9, 12]  
+
+},{
+  name: "acid",
+  probability: 0.09,
+  canvasBg: "#c8de9b",    
+  sod: "#040c06",         
+  bgColor: "#eeffcc",     
+  borderHi: "#305d42",    
+  borderLo: "#112318",    
+  titleBar: "#112318",    
+  closeBtn: "#040c06",    
+  winText: "#112318",
+  bodyElement1: "#bedc7f", 
+  bodyElement2: "#112318", 
+  extraBorderColor: "#1e3a29",  
+  bckelement1: "#eeffcc", 
+  bckelement2: "#89a257", 
+  bckstyle1: "#eeffcc",   
+  bckstyle2: "#89a257",   
+    compatibleStyles: ["appleLisa"],
+  sotText: "#eeffcc",     
+  posterizationValues: [9,12]
+},
+  {
+    name: "rsand",
+    probability: 0.08,
+    canvasBg: "#09122C",  
+    sod: "#09122C",       
+    bgColor: "#09122C",   
+    borderHi: "#E17564",  
+    borderLo: "#BE3144",  
+    titleBar: "#872341",  
+    closeBtn: "#BE3144",  
+        winText: "#872341",  
+
+    bodyElement1: "#E17564", 
+    bodyElement2: "#BE3144", 
+    extraBorderColor: "#872341",  
+    bckelement1: "#09122C",
+    bckelement2: "#63132b",
+    bckstyle1: "#09122C",
+    bckstyle2: "#872341",
+    compatibleStyles: ["appleLisa"],
+    sotText: "#E17564",
+          posterizationValues: [4, 6, 9,12]  
+
+  },
+  {
+    name: "sset",
+    probability: 0.09,
+    canvasBg: "#F9ED69",  
+    sod: "#B83B5E",       
+    bgColor: "#F08A5D",   
+    borderHi: "#B83B5E",  
+    borderLo: "#6A2C70",  
+    titleBar: "#B83B5E",  
+
+    closeBtn: "#F9ED69",  
+        winText: "#B83B5E",  
+
+    bodyElement1: "#F08A5D", 
+    bodyElement2: "#B83B5E", 
+    extraBorderColor: "#6A2C70",  
+    bckelement1: "#F9ED69",
+    bckelement2: "#F08A5D",
+    bckstyle1: "#B83B5E",
+    bckstyle2: "#6A2C70",
+    compatibleStyles: ["appleLisa"],
+    sotText: "#F08A5D",
+      posterizationValues: [4, 6, 9]  
+
+  },
+  {
+  name: "bchain",
+  probability: 0.07,
+  canvasBg: "#f2a900",         
+  sod: "#270200",              
+  bgColor: "#401a00",          
+  borderHi: "#f7931a",         
+  borderLo: "#cc6600",         
+  titleBar: "#f7931a",         
+  closeBtn: "#f2a900",         
+  winText: "#f2a900",          
+  extraBorderColor: "#f7931a", 
+  bodyElement1: "#ffffff",     
+  bodyElement2: "#f7931a",     
+  bckelement1: "#f7931a",      
+  bckelement2: "#784500",      
+  bckstyle1: "#401a00",        
+  bckstyle2: "#784500",        
+  compatibleStyles: ["appleLisa"],
+  sotText: "#f9a825",          
+  posterizationValues: [6, 9, 12]
+},
+   {
+  name: "fsion",
+  probability: 0.09,
+  canvasBg: "#ff166a",       
+  sod: "#121126",            
+  bgColor: "#121126",        
+  borderHi: "#32ffaf",       
+  borderLo: "#32ffaf",       
+  titleBar: "#32ffaf",       
+  closeBtn: "#121126",       
+  winText: "#32ffaf",        
+  extraBorderColor: "#32ffaf", 
+  bodyElement1: "#32ffaf",   
+  bodyElement2: "#32ffaf",   
+  bckelement1: "#32ffaf",    
+  bckelement2: "#ff166a",    
+  bckstyle1: "#121126",      
+  bckstyle2: "#ff166a",      
+  compatibleStyles: ["appleLisa"],
+  sotText: "#32ffaf",        
+  posterizationValues: [4, 6, 9, 12]
+},
+    {
+  name: "dsert",
+  probability: 0.05,
+  canvasBg: "#b2453d",       
+  sod: "#241b1d",            
+  bgColor: "#f6db8d",        
+  borderHi: "#5f778c",       
+  borderLo: "#241b1d",       
+  titleBar: "#c17653",       
+  closeBtn: "#b2453d",       
+  winText: "#b2453d",        
+  extraBorderColor: "#d7feff",
+  bodyElement1: "#c17653",     
+  bodyElement2: "#c17653",     
+  bckelement1: "#f6db8d",      
+  bckelement2: "#b2453d",      
+  bckstyle1: "#241b1d",        
+  bckstyle2: "#b2453d",        
+  compatibleStyles: ["appleLisa"],
+  sotText: "#f6db8d",         
+  posterizationValues: [4, 6, 9, 12]
+},
+
+  {
+    name: "classic",
+    probability: 0.1,
+    canvasBg: "#8f80df",
+    sod: "#663399",
+    bgColor: "#8f80df",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#8f80df",
+    closeBtn: "#ffffff",
+        winText: "#000000",
+
+    bodyElement1: "#800000",
+    bodyElement2: "#800000",
+    extraBorderColor: "#8f80df",
+    stripeEven: "#503b9a",
+    stripeOdd:  "#55409f",
+    bckelement1: "#8874d5",
+    bckElement2: "#7766c6",
+    bckstyle1: "#8874d5",
+    bckstyle2: "#7766c6",
+    compatibleStyles: ["commodore"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+   {
+    name: "WB",
+    probability: 0.1,
+    canvasBg: "#000000",
+    sod: "#000000",
+    bgColor: "#000000",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#ffffff",
+        winText: "#ffffff",
+
+    bodyElement1: "#ffffff",
+    bodyElement2: "#ffffff",
+    extraBorderColor: "#000000",
+    bckelement1: "#ffffff",
+    bckelement2: "#000000",
+    bckstyle1: "#ffffff",
+    bckstyle2: "#000000",
+    compatibleStyles: ["commodore"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+   {
+  name: "cyb",
+  probability: 0.1,
+  canvasBg: "#1A1A1A",       
+  sod: "#1F0B3D",            
+  bgColor: "#121212",        
+  borderHi: "#bc07c7",       
+  borderLo: "#500550",       
+  titleBar: "#00FFFF",       
+  closeBtn: "#121212",       
+    winText: "#00FFFF",       
+
+  bodyElement1: "#bc07c7",   
+  bodyElement2: "#00FFFF",   
+  extraBorderColor: "#FF69B4", 
+  bckelement1: "#3e093e",
+  bckelement2: "#960b9e",
+  bckstyle1: "#3e093e",
+  bckstyle2: "#960b9e",
+    compatibleStyles: ["commodore"],
+  sotText: "#bc07c7",
+    posterizationValues: [3, 6, 9]  
+
+},
+   {
+    name: "fire",
+    probability: 0.1,
+    canvasBg: "#11070a",  
+    sod: "#11070a",
+    bgColor: "#ff2a00",    
+    borderHi: "#ffc200",
+    borderLo: "#ffc200",
+    titleBar: "#ffc200",
+    closeBtn: "#ff2a00",
+    winText: "#fffcfe",
+    extraBorderColor: "#ffc200",
+    bodyElement1: "#ffc200",
+    bodyElement2: "#ffc200",
+    bckelement1: "#ffc200",
+    bckelement2: "#ff2a00",
+    bckstyle1: "#ff2a00",
+    bckstyle2: "#11070a",
+    compatibleStyles: ["commodore"],
+    sotText: "#fffcfe",
+  posterizationValues: [6,9, 12]  
+
+  },
+  {
+  name: "office",
+  probability: 0.1,
+  canvasBg: "#c0b89b",
+  sod: "#31353f",
+  bgColor: "#c0b89b",
+  borderHi: "#9b2202",
+  borderLo: "#701c06",
+  titleBar: "#701c06",
+  closeBtn: "#c0b89b",
+  winText: "#701c06",
+  extraBorderColor: "#701c06",
+  bodyElement1: "#f4f5f4",
+  bodyElement2: "#701c06",
+  bckelement1: "#701c06",
+  bckelement2: "#c0b89b",
+  bckstyle1: "#c0b89b",
+  bckstyle2: "#9b2202",
+    compatibleStyles: ["commodore"],
+  sotText: "#f4f5f4",
+  posterizationValues: [6, 9, 12]
+},
+  {
+    name: "rsand",
+    probability: 0.1,
+    canvasBg: "#09122C",  
+    sod: "#09122C",       
+    bgColor: "#09122C",   
+    borderHi: "#E17564",  
+    borderLo: "#BE3144",  
+    titleBar: "#872341",  
+    closeBtn: "#09122C",  
+        winText: "#872341",  
+
+    bodyElement1: "#E17564", 
+    bodyElement2: "#BE3144", 
+    extraBorderColor: "#872341",  
+    bckelement1: "#09122C",
+    bckelement2: "#63132b",
+    bckstyle1: "#09122C",
+    bckstyle2: "#872341",
+    compatibleStyles: ["commodore"],
+    sotText: "#E17564",
+          posterizationValues: [4, 6, 9,12]  
+
+  },
+
+{
+  name: "acid",
+  probability: 0.1,
+  canvasBg: "#c8de9b",    
+  sod: "#040c06",         
+  bgColor: "#eeffcc",     
+  borderHi: "#305d42",    
+  borderLo: "#112318",    
+  titleBar: "#112318",    
+  closeBtn: "#eeffcc",    
+  winText: "#112318",
+  bodyElement1: "#bedc7f", 
+  bodyElement2: "#112318", 
+  extraBorderColor: "#1e3a29",  
+  bckelement1: "#eeffcc", 
+  bckelement2: "#89a257", 
+  bckstyle1: "#eeffcc",   
+  bckstyle2: "#89a257",   
+    compatibleStyles: ["commodore"],
+  sotText: "#eeffcc",     
+  posterizationValues: [9,12]
+},
+   {
+  name: "bchain",
+  probability: 0.1,
+  canvasBg: "#f2a900",         
+  sod: "#270200",              
+  bgColor: "#401a00",          
+  borderHi: "#f7931a",         
+  borderLo: "#cc6600",         
+  titleBar: "#f7931a",         
+  closeBtn: "#f2a900",         
+  winText: "#f2a900",          
+  extraBorderColor: "#f7931a", 
+  bodyElement1: "#ffffff",     
+  bodyElement2: "#f7931a",     
+  bckelement1: "#f7931a",      
+  bckelement2: "#784500",      
+  bckstyle1: "#401a00",        
+  bckstyle2: "#784500",        
+  compatibleStyles: ["commodore"],
+  sotText: "#f9a825",          
+  posterizationValues: [6, 9, 12]
+},
+   {
+  name: "fsion",
+  probability: 0.1,
+  canvasBg: "#ff166a",       
+  sod: "#121126",            
+  bgColor: "#121126",        
+  borderHi: "#32ffaf",       
+  borderLo: "#32ffaf",       
+  titleBar: "#32ffaf",       
+  closeBtn: "#121126",       
+  winText: "#32ffaf",        
+  extraBorderColor: "#32ffaf", 
+  bodyElement1: "#32ffaf",   
+  bodyElement2: "#32ffaf",   
+  bckelement1: "#32ffaf",    
+  bckelement2: "#ff166a",    
+  bckstyle1: "#121126",      
+  bckstyle2: "#ff166a",      
+  compatibleStyles: ["commodore"],
+  sotText: "#32ffaf",        
+  posterizationValues: [4, 6, 9, 12]
+},
+     {
+  name: "dsert",
+  probability: 0.1,
+  canvasBg: "#b2453d",       
+  sod: "#241b1d",            
+  bgColor: "#f6db8d",        
+  borderHi: "#5f778c",       
+  borderLo: "#241b1d",       
+  titleBar: "#c17653",       
+  closeBtn: "#b2453d",       
+  winText: "#b2453d",        
+  extraBorderColor: "#d7feff",
+  bodyElement1: "#c17653",     
+  bodyElement2: "#c17653",     
+  bckelement1: "#f6db8d",      
+  bckelement2: "#b2453d",      
+  bckstyle1: "#241b1d",        
+  bckstyle2: "#b2453d",        
+  compatibleStyles: ["commodore"],
+  sotText: "#f6db8d",         
+  posterizationValues: [4, 6, 9, 12]
+},
+
+  {
+    name: "g",
+    probability: 0.12,
+    canvasBg: "#0d1a2b",
+    sod: "#001122",
+    bgColor: "#0f213f",
+    borderHi: "#1c7131",
+    borderLo: "#1c7131",
+    titleBar: "#1c7131",
+    closeBtn: "#1c7131",
+        winText: "#1c7131",
+
+    bodyElement1: "#1c7131",
+    bodyElement2: "#1c7131",
+    extraBorderColor: "#1c7131",
+    bckelement1: "#0f213f",
+    bckelement2: "#1c7131",
+    bckstyle1: "#0f213f",
+    bckstyle2: "#1c7131",
+    compatibleStyles: ["windows2"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+  }, 
+   {
+    name: "WB",
+    probability: 0.08,
+    canvasBg: "#000000",
+    sod: "#000000",
+    bgColor: "#000000",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#000000",
+        winText: "#ffffff",
+
+    bodyElement1: "#ffffff",
+    bodyElement2: "#ffffff",
+    extraBorderColor: "#000000",
+    bckelement1: "#ffffff",
+    bckelement2: "#000000",
+    bckstyle1: "#ffffff",
+    bckstyle2: "#000000",
+    compatibleStyles: ["windows2"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+  {
+  name: "cyb",
+  probability: 0.08,
+  canvasBg: "#1A1A1A",       
+  sod: "#1F0B3D",            
+  bgColor: "#121212",        
+  borderHi: "#bc07c7",       
+  borderLo: "#500550",       
+  titleBar: "#00FFFF",       
+  closeBtn: "#121212",       
+    winText: "#00FFFF",       
+
+  bodyElement1: "#bc07c7",   
+  bodyElement2: "#00FFFF",   
+  extraBorderColor: "#FF69B4", 
+  bckelement1: "#3e093e",
+  bckelement2: "#960b9e",
+  bckstyle1: "#3e093e",
+  bckstyle2: "#960b9e",
+    compatibleStyles: ["windows2"],
+  sotText: "#bc07c7",
+    posterizationValues: [3, 6, 9]  
+
+},
+   {
+    name: "fire",
+    probability: 0.08,
+    canvasBg: "#11070a",  
+    sod: "#11070a",
+    bgColor: "#ff2a00",    
+    borderHi: "#ffc200",
+    borderLo: "#ffc200",
+    titleBar: "#ffc200",
+    closeBtn: "#ff2a00",
+    winText: "#fffcfe",
+    extraBorderColor: "#ffc200",
+    bodyElement1: "#ffc200",
+    bodyElement2: "#ffc200",
+    bckelement1: "#ffc200",
+    bckelement2: "#ff2a00",
+    bckstyle1: "#ff2a00",
+    bckstyle2: "#11070a",
+    compatibleStyles: ["windows2"],
+    sotText: "#fffcfe",
+  posterizationValues: [6,9, 12]  
+
+  },
+  {
+  name: "office",
+  probability: 0.1,
+  canvasBg: "#c0b89b",
+  sod: "#31353f",
+  bgColor: "#c0b89b",
+  borderHi: "#9b2202",
+  borderLo: "#701c06",
+  titleBar: "#701c06",
+  closeBtn: "#c0b89b",
+  winText: "#701c06",
+  extraBorderColor: "#701c06",
+  bodyElement1: "#f4f5f4",
+  bodyElement2: "#701c06",
+  bckelement1: "#701c06",
+  bckelement2: "#c0b89b",
+  bckstyle1: "#c0b89b",
+  bckstyle2: "#9b2202",
+    compatibleStyles: ["windows2"],
+  sotText: "#f4f5f4",
+  posterizationValues: [6, 9, 12]
+},
+  {
+    name: "rsand",
+    probability: 0.1,
+    canvasBg: "#09122C",  
+    sod: "#09122C",       
+    bgColor: "#09122C",   
+    borderHi: "#E17564",  
+    borderLo: "#BE3144",  
+    titleBar: "#872341",  
+    closeBtn: "#09122C",  
+        winText: "#872341",  
+
+    bodyElement1: "#E17564", 
+    bodyElement2: "#BE3144", 
+    extraBorderColor: "#872341",  
+    bckelement1: "#09122C",
+    bckelement2: "#63132b",
+    bckstyle1: "#09122C",
+    bckstyle2: "#872341",
+    compatibleStyles: ["windows2"],
+    sotText: "#E17564",
+          posterizationValues: [4, 6, 9,12]  
+
+  },
+  {
+    name: "sset",
+    probability: 0.1,
+    canvasBg: "#F9ED69",  
+    sod: "#B83B5E",       
+    bgColor: "#F08A5D",   
+    borderHi: "#B83B5E",  
+    borderLo: "#6A2C70",  
+    titleBar: "#B83B5E",  
+
+    closeBtn: "#F08A5D",  
+        winText: "#B83B5E",  
+
+    bodyElement1: "#F08A5D", 
+    bodyElement2: "#B83B5E", 
+    extraBorderColor: "#6A2C70",  
+    bckelement1: "#F9ED69",
+    bckelement2: "#F08A5D",
+    bckstyle1: "#B83B5E",
+    bckstyle2: "#6A2C70",
+    compatibleStyles: ["windows2"],
+    sotText: "#F08A5D",
+      posterizationValues: [4, 6, 9]  
+
+  },
+{
+  name: "acid",
+  probability: 0.1,
+  canvasBg: "#c8de9b",    
+  sod: "#040c06",         
+  bgColor: "#eeffcc",     
+  borderHi: "#305d42",    
+  borderLo: "#112318",    
+  titleBar: "#112318",    
+  closeBtn: "#eeffcc",    
+  winText: "#112318",
+  bodyElement1: "#bedc7f", 
+  bodyElement2: "#112318", 
+  extraBorderColor: "#1e3a29",  
+  bckelement1: "#eeffcc", 
+  bckelement2: "#89a257", 
+  bckstyle1: "#eeffcc",   
+  bckstyle2: "#89a257",   
+    compatibleStyles: ["windows2"],
+  sotText: "#eeffcc",     
+  posterizationValues: [9,12]
+},
+   {
+  name: "bchain",
+  probability: 0.08,
+  canvasBg: "#f2a900",         
+  sod: "#270200",              
+  bgColor: "#401a00",          
+  borderHi: "#f7931a",         
+  borderLo: "#cc6600",         
+  titleBar: "#f7931a",         
+  closeBtn: "#401a00",         
+  winText: "#f2a900",          
+  extraBorderColor: "#f7931a", 
+  bodyElement1: "#ffffff",     
+  bodyElement2: "#f7931a",     
+  bckelement1: "#f7931a",      
+  bckelement2: "#784500",      
+  bckstyle1: "#401a00",        
+  bckstyle2: "#784500",        
+  compatibleStyles: ["windows2"],
+  sotText: "#f9a825",          
+  posterizationValues: [6, 9, 12]
+},
+   {
+  name: "fsion",
+  probability: 0.09,
+  canvasBg: "#ff166a",       
+  sod: "#121126",            
+  bgColor: "#121126",        
+  borderHi: "#32ffaf",       
+  borderLo: "#32ffaf",       
+  titleBar: "#32ffaf",       
+  closeBtn: "#121126",       
+  winText: "#32ffaf",        
+  extraBorderColor: "#32ffaf", 
+  bodyElement1: "#32ffaf",   
+  bodyElement2: "#32ffaf",   
+  bckelement1: "#32ffaf",    
+  bckelement2: "#ff166a",    
+  bckstyle1: "#121126",      
+  bckstyle2: "#ff166a",      
+  compatibleStyles: ["windows2"],
+  sotText: "#32ffaf",        
+  posterizationValues: [4, 6, 9, 12]
+},
+     {
+  name: "dsert",
+  probability: 0.07,
+  canvasBg: "#b2453d",       
+  sod: "#241b1d",            
+  bgColor: "#f6db8d",        
+  borderHi: "#5f778c",       
+  borderLo: "#241b1d",       
+  titleBar: "#c17653",       
+  closeBtn: "#f6db8d",       
+  winText: "#b2453d",        
+  extraBorderColor: "#d7feff",
+  bodyElement1: "#c17653",     
+  bodyElement2: "#c17653",     
+  bckelement1: "#f6db8d",      
+  bckelement2: "#b2453d",      
+  bckstyle1: "#241b1d",        
+  bckstyle2: "#b2453d",        
+  compatibleStyles: ["windows2"],
+  sotText: "#f6db8d",         
+  posterizationValues: [6, 9, 12]
+},
+
+  {
+    name: "classic",
+    probability: 0.14,
+    canvasBg: "#ffffff",
+    sod: "#DDDDFF",
+    bgColor: "#ffffff",
+    borderHi: "#000000",
+    borderLo: "#000000",
+    titleBar: "#ffffff",
+    closeBtn: "#000000",
+        winText: "#000000",
+
+    bodyElement1: "#800000",
+    bodyElement2: "#1c7131",
+    extraBorderColor: "#000000",
+    bckelement1: "#000000",
+    bckelement2: "#ffffff",
+    bckstyle1: "#000000",
+    bckstyle2: "#ffffff",
+    compatibleStyles: ["apple_new"],
+    sotText: "#000000",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+   {
+    name: "WB",
+    probability: 0.08,
+    canvasBg: "#000000",
+    sod: "#000000",
+    bgColor: "#000000",
+    borderHi: "#ffffff",
+    borderLo: "#000000",
+    titleBar: "#000000",
+    closeBtn: "#ffffff",
+        winText: "#ffffff",
+
+    bodyElement1: "#ffffff",
+    bodyElement2: "#ffffff",
+    extraBorderColor: "#000000",
+    bckelement1: "#ffffff",
+    bckelement2: "#000000",
+    bckstyle1: "#ffffff",
+    bckstyle2: "#000000",
+    compatibleStyles: ["apple_new"],
+    sotText: "#ffffff",
+        posterizationValues: [4, 6, 9, 12] 
+
+  },
+
+  {
+    name: "g",
+    probability: 0.07,
+    canvasBg: "#0d1a2b",
+    sod: "#001122",
+    bgColor: "#0f213f",
+    borderHi: "#1c7131",
+    borderLo: "#1c7131",
+    titleBar: "#1c7131",
+    closeBtn: "#1c7131",
+        winText: "#1c7131",
+
+    bodyElement1: "#1c7131",
+    bodyElement2: "#1c7131",
+    extraBorderColor: "#1c7131",
+    bckelement1: "#0f213f",
+    bckelement2: "#1c7131",
+    bckstyle1: "#0f213f",
+    bckstyle2: "#1c7131",
+    compatibleStyles: ["apple_new"],
+    sotText: "#ffffff",
+        posterizationValues: [6, 9, 12] 
+  }, {
+  name: "cyb",
+  probability: 0.07,
+  canvasBg: "#1A1A1A",       
+  sod: "#1F0B3D",            
+  bgColor: "#121212",        
+  borderHi: "#bc07c7",       
+  borderLo: "#500550",       
+  titleBar: "#00FFFF",       
+  closeBtn: "#121212",       
+    winText: "#00FFFF",       
+
+  bodyElement1: "#bc07c7",   
+  bodyElement2: "#00FFFF",   
+  extraBorderColor: "#FF69B4", 
+  bckelement1: "#3e093e",
+  bckelement2: "#960b9e",
+  bckstyle1: "#3e093e",
+  bckstyle2: "#960b9e",
+    compatibleStyles: ["apple_new"],
+  sotText: "#bc07c7",
+    posterizationValues: [6, 9, 12]  
+
+},
+   {
+    name: "fire",
+    probability: 0.07,
+    canvasBg: "#11070a",  
+    sod: "#11070a",
+    bgColor: "#ff2a00",    
+    borderHi: "#ffc200",
+    borderLo: "#ffc200",
+    titleBar: "#ffc200",
+    closeBtn: "#ff2a00",
+    winText: "#fffcfe",
+    extraBorderColor: "#ffc200",
+    bodyElement1: "#ffc200",
+    bodyElement2: "#ffc200",
+    bckelement1: "#ffc200",
+    bckelement2: "#ff2a00",
+    bckstyle1: "#ff2a00",
+    bckstyle2: "#11070a",
+    compatibleStyles: ["apple_new"],
+    sotText: "#fffcfe",
+  posterizationValues: [6,9, 12]  
+
+  },
+  {
+  name: "office",
+  probability: 0.07,
+  canvasBg: "#c0b89b",
+  sod: "#31353f",
+  bgColor: "#c0b89b",
+  borderHi: "#9b2202",
+  borderLo: "#701c06",
+  titleBar: "#701c06",
+  closeBtn: "#c0b89b",
+  winText: "#701c06",
+  extraBorderColor: "#701c06",
+  bodyElement1: "#f4f5f4",
+  bodyElement2: "#701c06",
+  bckelement1: "#701c06",
+  bckelement2: "#c0b89b",
+  bckstyle1: "#c0b89b",
+  bckstyle2: "#9b2202",
+    compatibleStyles: ["apple_new"],
+  sotText: "#f4f5f4",
+  posterizationValues: [6, 9, 12]
+},
+  {
+    name: "rsand",
+    probability: 0.09,
+    canvasBg: "#09122C",  
+    sod: "#09122C",       
+    bgColor: "#09122C",   
+    borderHi: "#E17564",  
+    borderLo: "#BE3144",  
+    titleBar: "#872341",  
+    closeBtn: "#09122C",  
+        winText: "#872341",  
+
+    bodyElement1: "#E17564", 
+    bodyElement2: "#BE3144", 
+    extraBorderColor: "#872341",  
+    bckelement1: "#09122C",
+    bckelement2: "#63132b",
+    bckstyle1: "#09122C",
+    bckstyle2: "#872341",
+    compatibleStyles: ["apple_new"],
+    sotText: "#E17564",
+          posterizationValues: [4, 6, 9,12]  
+
+  },
+  {
+    name: "sunset",
+    probability: 0.09,
+    canvasBg: "#F9ED69",  
+    sod: "#B83B5E",       
+    bgColor: "#F08A5D",   
+    borderHi: "#B83B5E",  
+    borderLo: "#6A2C70",  
+    titleBar: "#B83B5E",  
+
+    closeBtn: "#F08A5D",  
+        winText: "#B83B5E",  
+
+    bodyElement1: "#F08A5D", 
+    bodyElement2: "#B83B5E", 
+    extraBorderColor: "#6A2C70",  
+    bckelement1: "#F9ED69",
+    bckelement2: "#F08A5D",
+    bckstyle1: "#B83B5E",
+    bckstyle2: "#6A2C70",
+    compatibleStyles: ["apple_new"],
+    sotText: "#F08A5D",
+      posterizationValues: [4, 6, 9]  
+
+  },
+{
+  name: "acid",
+  probability: 0.09,
+  canvasBg: "#c8de9b",    
+  sod: "#040c06",         
+  bgColor: "#eeffcc",     
+  borderHi: "#305d42",    
+  borderLo: "#112318",    
+  titleBar: "#112318",    
+  closeBtn: "#eeffcc",    
+  winText: "#112318",
+  bodyElement1: "#bedc7f", 
+  bodyElement2: "#112318", 
+  extraBorderColor: "#1e3a29",  
+  bckelement1: "#eeffcc", 
+  bckelement2: "#89a257", 
+  bckstyle1: "#eeffcc",   
+  bckstyle2: "#89a257",   
+    compatibleStyles: ["apple_new"],
+  sotText: "#eeffcc",     
+  posterizationValues: [9,12]
+},
+   {
+  name: "bchain",
+  probability: 0.07,
+  canvasBg: "#f2a900",         
+  sod: "#270200",              
+  bgColor: "#401a00",          
+  borderHi: "#f7931a",         
+  borderLo: "#cc6600",         
+  titleBar: "#f7931a",         
+  closeBtn: "#f2a900",         
+  winText: "#f2a900",          
+  extraBorderColor: "#f7931a", 
+  bodyElement1: "#ffffff",     
+  bodyElement2: "#f7931a",     
+  bckelement1: "#f7931a",      
+  bckelement2: "#784500",      
+  bckstyle1: "#401a00",        
+  bckstyle2: "#784500",        
+  compatibleStyles: ["apple_new"],
+  sotText: "#f9a825",          
+  posterizationValues: [6, 9, 12]
+},
+   {
+  name: "fsion",
+  probability: 0.09,
+  canvasBg: "#ff166a",       
+  sod: "#121126",            
+  bgColor: "#121126",        
+  borderHi: "#32ffaf",       
+  borderLo: "#32ffaf",       
+  titleBar: "#32ffaf",       
+  closeBtn: "#121126",       
+  winText: "#32ffaf",        
+  extraBorderColor: "#32ffaf", 
+  bodyElement1: "#32ffaf",   
+  bodyElement2: "#32ffaf",   
+  bckelement1: "#32ffaf",    
+  bckelement2: "#ff166a",    
+  bckstyle1: "#121126",      
+  bckstyle2: "#ff166a",      
+  compatibleStyles: ["apple_new"],
+  sotText: "#32ffaf",        
+  posterizationValues: [4, 6, 9, 12]
+},
+     {
+  name: "dsert",
+  probability: 0.07,
+  canvasBg: "#b2453d",       
+  sod: "#241b1d",            
+  bgColor: "#f6db8d",        
+  borderHi: "#5f778c",       
+  borderLo: "#241b1d",       
+  titleBar: "#c17653",       
+  closeBtn: "#b2453d",       
+  winText: "#b2453d",        
+  extraBorderColor: "#d7feff",
+  bodyElement1: "#c17653",     
+  bodyElement2: "#c17653",     
+  bckelement1: "#f6db8d",      
+  bckelement2: "#b2453d",      
+  bckstyle1: "#241b1d",        
+  bckstyle2: "#b2453d",        
+  compatibleStyles: ["apple_new"],
+  sotText: "#f6db8d",         
+  posterizationValues: [4, 6, 9, 12]
+},
+];
+
+let windowStyleProfiles = [
+  { name: "appleLisa", probability: 0.26 },
+  { name: "apple_new", probability: 0.1 },  
+  { name: "commodore", probability: 0.1 },
+    { name: "windows2", probability: 0.18 },
+    { name: "win98", probability: 0.36 }
+
+];
+
+let alphaProfiles = [
+
+  { name: "alpha125", probability: 0.23, alphaValue: 125 },
+  { name: "alpha100", probability: 0.23, alphaValue: 100 },
+  { name: "alpha75", probability: 0.23, alphaValue: 75 },
+  { name: "alpha50", probability: 0.1, alphaValue: 50 },
+    { name: "alpha150", probability: 0.21, alphaValue: 150 }
+];
+
+let borderProfiles = [
+  { name: "thin", probability: 0.2, strokeW: 0 },
+  { name: "mid", probability: 0.35, strokeW: 2 },
+  { name: "thick", probability: 0.25, strokeW: 4 },
+  { name: "bold", probability: 0.2, strokeW: 10 },
+];
+
+let waveCountProfiles = [
+  { name: "fourWaves", probability: 0.45, count: 4 },
+  { name: "threeWaves", probability: 0.45, count: 3 },
+    { name: "twoWaves", probability: 0.1, count: 2 }
+];
+
+let waveFreqProfiles = [
+  { name: "slow", probability: 1, freq: [0.008, 0.018, 0.025, 0.033] }
+];
+
+let waveAmpProfiles = [
+  { name: "medAmp", probability: 0.75, amp: [100, 100, 80, 60] },
+    { name: "highAmp", probability: 0.25, amp: [100, 100, 180, 60] }
+
+];
+
+let specialEffectProfiles = [
+    { name: "lineText", probability: 0.07 },
+  { name: "glitch", probability: 0 },
+  { name: "doubling", probability: 0.1 },
+  { name: "none", probability: 0.83 }
+];
+
+let renderEffectProfiles = [
+  { name: "none", probability: 0.2 },
+  { name: "dithering", probability: 0.8 }
+];
+
+let filterProfiles = [
+  { name: "posterizeInvert", probability: 1.0 }
+];
+
+let colorFinalFilterProfiles = [
+  { name: "inverse", probability: 0 },
+  { name: "none", probability: 1 }
+];
+
+let borderFinalFilterProfiles = [
+  { name: "posterizeLow", probability: 0.2, levels: 4 },
+  { name: "posterizeMed", probability: 0.3, levels: 6 },
+  { name: "posterizeHigh", probability: 0.3, levels: 9 },
+  { name: "posterizeHigh", probability: 0.2, levels: 12 }
+];
+
+let windowDimensionProfiles = [
+  {
+    name: "c",
+    probability: 0.3,
+    width: 120,
+    height: 80,
+    titleBarHeight: 20,
+    iconSize: 16
+  },
+  {
+    name: "s",
+    probability: 0.25,
+    width: 120,
+    height: 120,
+    titleBarHeight: 20,
+    iconSize: 16
+  },
+  {
+    name: "b",
+    probability: 0.15,
+    width: 180,
+    height: 140,
+    titleBarHeight: 20,
+    iconSize: 16
+  },
+  {
+    name: "w",
+    probability: 0.3,
+    width: 160,
+    height: 100,
+    titleBarHeight: 20,
+    iconSize: 16
+  }
+];
+
+let ditheringTypeProfiles = [
+  { name: "progressive", probability: 1.0 }
+];
+
+let ditheringPatternProfiles = [
+
+  { name: "classic_500_1", probability: 0.22, width: 500, height: 500, squareSize: 1 },
+  { name: "classic_500_2", probability: 0.22, width: 500, height: 500, squareSize: 2 },
+  { name: "ten_500_1", probability: 0.1, width: 50, height: 500, squareSize: 1 },
+  { name: "row_500_1", probability: 0.23, width: 1, height: 500, squareSize: 1 },
+  { name: "col_500_1", probability: 0.23, width: 500, height: 1, squareSize: 1 },
+
+];
+
+let stepEffectProfiles = [
+  { name: "fragmentation", probability: 0.05 },
+  { name: "none", probability: 0.95 }
+];
+
+let bordiEffectProfiles = [
+  { name: "scrollBars", probability: 0.35 },
+  { name: "none", probability: 0.65 }
+];
+
+let winBodyElementsProfiles = [
+  { name: "text", probability: 0.06 },
+  { name: "spectrum", probability: 0.06 },
+  { name: "bluescreen", probability: 0.05 }, 
+  { name: "button", probability: 0.06 },
+  { name: "progressBar", probability: 0.05 },
+  { name: "squareprogress", probability: 0.05 },
+  { name: "error", probability: 0.02 } ,
+  { name: "none", probability: 0.65 }
+];
+
+let backgroundStyleProfiles = [
+  { name: "tron", probability: 0.05 }, 
+  { name: "wheels", probability: 0.09 },
+  { name: "squarewheels", probability: 0.07 },
+  { name: "columnwheels", probability: 0.06 }, 
+  { name: "rowwheels", probability: 0.06 },  
+  { name: "blueScreen", probability: 0.08 }, 
+  { name: "verticalTable", probability: 0.06 },
+  { name: "horizTable", probability: 0.06 },
+  { name: "asciiArt", probability: 0.12 }, 
+  { name: "irregularGrid", probability: 0.08 }, 
+  { name: "gradientRGB", probability: 0.07 },
+  { name: "none", probability: 0.2 }
+];
+
+let backgroundElementProfiles = [
+    { name: "windowsButtons", probability: 0.05 },
+    { name: "buttonspectrum", probability: 0.19 },
+    { name: "nestedWindows", probability: 0.02 } ,
+    { name: "editwindow", probability: 0.05 },
+    { name: "none", probability: 0.69 }
+];
+
+let chosenColorProfile;
+let chosenWindowStyle;  
+let chosenAlpha;
+let chosenBorderWeight;
+
+let asciiBg; 
+let redOffsetX, redOffsetY, blueOffsetX, blueOffsetY;
+
+let chosenBackgroundStyle; 
+let chosenBackgroundElement; 
+let chosenBordiEffect;
+
+let verticalThumbOffset, horizontalThumbOffset;
+let doublingScrollOffsetVertical, doublingScrollOffsetHorizontal;
+
+let frameEffects = [];  
+let totalFrames;        
+
+let windowsButtonsData = [];
+
+let nestedWindowsData = [];
+let editWindowsData = [];  
+let buttonSpectrumData = [];
+
+let chosenStepEffect;
+let chosenWinBodyElement;  
+let winSpectrumH1 = 0, winSpectrumH2 = 0, winSpectrumH3 = 0;
+
+let columnWheelsParams;
+let rowWheelsParams;
+let tronParams;  
+
+let waveCount;
+let waveFreqs = [];
+let waveAmps = [];
+let wavePhases = [];
+let profilesPrinted = false;
+let baseSpeed;
+let xStart;
+let xEnd;
+let centerY;
+let windowW;
+let windowH;
+let gradImageGlobal;
+let irregularGridCells;
+
+let titleBarHeight;
+let iconSize;
+
+let referenceSize = 1000;
+let scaleFactor;
+
+let chosenSpecialEffect;
+let chosenRenderEffect;
+let chosenFilterEffect;
+
+let chosenColorFinalFilter;
+let chosenBorderFinalFilter;
+
+let chosenDitheringType;
+let chosenDitherPatternProfile;
+let ditherPattern;
+let deltaSliding;
+
+let verticalScrollBarPosition;   
+let horizontalScrollBarPosition; 
+let textPhrases = [
+  "HELLO WORLD!",
+  "Not Found",
+  "404",
+  "Injection",
+  "SENTINEL.exe",
+  "required ethereum.sol",
+  "detected"
+];
+
+let mode = "final"; 
+let animFrame = 0;
+let seedValue;
+
+function pickProfile(profilesArray) {
+  let r = random(1);
+  let cumulative = 0;
+  for (let p of profilesArray) {
+    cumulative += p.probability;
+    if (r < cumulative) {
+      return p;
+    }
+  }
+  return profilesArray[profilesArray.length - 1];
+}
+
+function shift_hash(inscription_id) {
+      let hash = 0;
+      const prime = 31;
+      const maxValue = 1400000000;
+
+      for (let i = 0; i < inscription_id.length; i++) {
+        const char = inscription_id.charCodeAt(i);
+        hash = (hash * prime + char) | 0; 
+      }
+      return Math.abs(hash) % maxValue; 
+    }
+
+function setup() {
+  createCanvas(1000, 1000);
+  scaleFactor = min(width, height) / referenceSize;
+
+  const inscription_id = new URLSearchParams(window.location.search).get("id") || "";
+  seedValue = shift_hash(inscription_id);
+      randomSeed(seedValue);
+      noiseSeed(seedValue);
+
+computeStaticElements();
+
+  initSketch();
+
+  redOffsetX = random(-10, 10);
+  redOffsetY = random(-3, 3);
+  blueOffsetX = random(-10, 10);
+  blueOffsetY = random(-3, 3);
+
+    chosenBordiEffect = pickProfile(bordiEffectProfiles);
+
+  if (chosenRenderEffect.name === "dithering") {
+  let alphaForPattern = (chosenDitherPatternProfile.squareSize === 2) ? 20 : 40;
+ditherPattern = createDitherPattern(
+  chosenDitherPatternProfile.width, 
+  chosenDitherPatternProfile.height, 
+  chosenDitherPatternProfile.squareSize,
+  alphaForPattern
+);
+} else {
+  ditherPattern = createDitherPattern(500, 500);
+}
+
+  background(chosenColorProfile.canvasBg);
+
+  if (chosenBackgroundStyle.name === "blueScreen") {
+  drawBlueScreen();
+} else if (chosenBackgroundStyle.name === "verticalTable") {
+    drawVerticalTable();
+  } else if (chosenBackgroundStyle.name === "horizTable") {
+    drawHorizTable();
+  } else if (chosenBackgroundStyle.name === "asciiArt") {
+
+    asciiBg = createGraphics(width, height);
+    asciiBg.pixelDensity(1);
+
+    asciiBg.randomSeed(seedValue);
+    drawAsciiArtBackground(asciiBg);
+
+    image(asciiBg, 0, 0);
+  } else if (chosenBackgroundStyle.name === "irregularGrid") {
+
+  drawIrregularGrid();
+} else if (chosenBackgroundStyle.name === "gradientRGB") {
+  drawIrregularGridGradient();
+} else if (chosenBackgroundStyle.name === "tron") {
+
+  drawTron();
+} else if (chosenBackgroundStyle.name === "wheels") {
+    let r = 499;
+    let cx = width / 2;
+    let cy = height / 2;
+    drawHorizontalColorWheel(cx, cy, r);
+    drawWindowsEllipseBorder(cx, cy, r);
+  } else if (chosenBackgroundStyle.name === "squarewheels") {
+
+  let side = 800;  
+  let cx = width / 2;
+  let cy = height / 2;
+  drawSquareWheels(cx, cy, side);
+      drawWindowsSquareBorder(cx, cy, side);
+
+  push();
+    strokeWeight(2 * scaleFactor);
+    let borderC = color(chosenColorProfile.borderHi);
+    borderC.setAlpha(chosenAlpha);
+    stroke(borderC);
+    noFill();
+    rect(cx - side/2, cy - side/2, side, side);
+  pop();
+} else if (chosenBackgroundStyle.name === "columnwheels") {
+columnWheelsParams = computeColumnWheelsParams();
+  drawColumnWheelsFromParams(columnWheelsParams);
+
+  drawColumnWheelsBorder(columnWheelsParams);
+} else if (chosenBackgroundStyle.name === "rowwheels") {
+      rowWheelsParams = computeRowWheelsParams();
+  drawRowWheelsFromParams(rowWheelsParams);
+  drawRowWheelsBorder(rowWheelsParams);
+} 
+
+if (chosenBackgroundElement.name === "windowsButtons" && chosenWindowStyle.name !== "commodore") {
+
+    drawWindowsButtons();
+  } else if (chosenBackgroundElement.name === "nestedWindows") {
+  drawNestedWindows();  
+}else if (chosenBackgroundElement.name === "editwindow") {
+  drawEditWindows();
+}else if (chosenBackgroundElement.name === "buttonspectrum") {
+  drawButtonSpectrum();
+};
+    selectedPhrase = random(textPhrases);
+
+  simulateFinalAnimation();
+  applyChosenFilter(chosenFilterEffect);
+  applyColorFinalFilter();
+  applyBorderFinalFilter();
+
+  if (chosenRenderEffect.name === "dithering" && chosenDitheringType.name === "progressive") {
+    applyProgressiveDithering();
+  }
+ if (chosenBackgroundStyle.name !== "blueScreen" && chosenBordiEffect.name === "scrollBars") {
+  drawScrollBars();
+}
+
+  noLoop();
+}
+
+function initSketch() {
+  deltaSliding = random(-50, 50);
+
+  chosenBackgroundStyle = pickProfile(backgroundStyleProfiles);
+
+  let filteredElements;
+  let drawScrollbars = true;
+
+  if (chosenBackgroundStyle.name === "blueScreen") {
+
+    chosenBordiEffect = { name: "none", probability: 1.0 };
+    chosenBackgroundElement = { name: "none", probability: 1.0 };
+    drawScrollbars = false;
+  }
+  else if (chosenBackgroundStyle.name === "tron") {
+
+    filteredElements = backgroundElementProfiles.filter(profile =>
+      profile.name !== "buttonspectrum" && profile.name !== "nestedWindows"
+    );
+    drawScrollbars = false;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+  else if (chosenBackgroundStyle.name === "wheels" || chosenBackgroundStyle.name === "squarewheels") {
+
+    filteredElements = backgroundElementProfiles.filter(profile =>
+      profile.name !== "buttonspectrum" && profile.name !== "nestedWindows"
+    );
+    drawScrollbars = true;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+  else if (chosenBackgroundStyle.name === "verticalTable" ||
+           chosenBackgroundStyle.name === "horizTable" ||
+            chosenBackgroundStyle.name === "columnwheels" ||
+            chosenBackgroundStyle.name === "rowwheels" ||
+           chosenBackgroundStyle.name === "asciiArt" ||
+           chosenBackgroundStyle.name === "gradientRGB") {
+
+    filteredElements = backgroundElementProfiles.filter(profile =>
+      profile.name !== "buttonspectrum" && profile.name !== "nestedWindows"
+    );
+    drawScrollbars = true;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+  else if (chosenBackgroundStyle.name === "irregularGrid") {
+
+    filteredElements = backgroundElementProfiles.filter(profile =>
+      profile.name !== "nestedWindows"
+    );
+    drawScrollbars = true;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+  else if (chosenBackgroundStyle.name === "none") {
+
+    filteredElements = backgroundElementProfiles;
+    drawScrollbars = true;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+  else {
+
+    filteredElements = backgroundElementProfiles;
+    drawScrollbars = true;
+    chosenBackgroundElement = pickProfile(filteredElements);
+  }
+
+  window.drawScrollbars = drawScrollbars;
+
+  chosenSpecialEffect = pickProfile(specialEffectProfiles);
+  chosenRenderEffect = pickProfile(renderEffectProfiles);
+  chosenFilterEffect = pickProfile(filterProfiles);
+
+  if (chosenRenderEffect.name === "dithering") {
+    chosenDitheringType = pickProfile(ditheringTypeProfiles);
+    chosenDitherPatternProfile = pickProfile(ditheringPatternProfiles);
+  }
+
+  chosenWindowStyle = pickProfile(windowStyleProfiles);
+
+  let compatibleColorProfiles = colorProfiles.filter(profile => {
+    if (!profile.compatibleStyles) return true;
+    return profile.compatibleStyles.includes(chosenWindowStyle.name);
+  });
+  chosenColorProfile = compatibleColorProfiles.length > 0 
+                      ? pickProfile(compatibleColorProfiles) 
+                      : pickProfile(colorProfiles);
+
+  background(chosenColorProfile.canvasBg);
+
+  let chosenSpeedProfile = pickProfile(speedProfiles);
+  baseSpeed = chosenSpeedProfile.speedValue * scaleFactor;
+  let chosenAmpProfile;
+  if (chosenSpeedProfile.name === "slow" || chosenSpeedProfile.name === "very_slow") {
+    chosenAmpProfile = waveAmpProfiles.find(profile => profile.name === "highAmp");
+  } else {
+    chosenAmpProfile = waveAmpProfiles.find(profile => profile.name === "medAmp");
+  }
+  let alphaProfile = pickProfile(alphaProfiles);
+  chosenAlpha = alphaProfile.alphaValue;
+
+  let bordProfile = pickProfile(borderProfiles);
+  chosenBorderWeight = bordProfile.strokeW * scaleFactor;
+
+  let waveCountProfile = pickProfile(waveCountProfiles);
+  waveCount = waveCountProfile.count;
+
+  let freqProfile = pickProfile(waveFreqProfiles);
+  waveFreqs = freqProfile.freq.slice(0, waveCount);
+
+  let ampProfile = pickProfile(waveAmpProfiles);
+  waveAmps = ampProfile.amp.slice(0, waveCount);
+
+  verticalThumbOffset = random(-355, 355);
+  horizontalThumbOffset = random(-355, 355);
+
+  wavePhases = [];
+  for (let i = 0; i < waveCount; i++) {
+    wavePhases.push(random(TWO_PI));
+  }
+
+  xStart = 100 * scaleFactor;
+  xEnd = 900 * scaleFactor;
+  centerY = 500 * scaleFactor;
+
+  let chosenWindowProfileDim = pickProfile(windowDimensionProfiles);
+  windowW = chosenWindowProfileDim.width * scaleFactor;
+  windowH = chosenWindowProfileDim.height * scaleFactor;
+  titleBarHeight = chosenWindowProfileDim.titleBarHeight * scaleFactor;
+  iconSize = chosenWindowProfileDim.iconSize * scaleFactor;
+
+  for (let i = 0; i < waveCount; i++) {
+    waveFreqs[i] *= (1 / scaleFactor);
+    waveAmps[i] *= scaleFactor;
+  }
+
+  chosenColorFinalFilter = pickProfile(colorFinalFilterProfiles);
+  chosenBorderFinalFilter = pickProfile(borderFinalFilterProfiles);
+
+  doublingScrollOffsetVertical = random(0, 350);
+  doublingScrollOffsetHorizontal = random(0, 350);
+  verticalScrollBarPosition = random(["left", "right"]);
+  horizontalScrollBarPosition = random(["top", "bottom"]);
+
+  chosenStepEffect = pickProfile(stepEffectProfiles);
+
+  chosenWinBodyElement = pickProfile(winBodyElementsProfiles);
+
+  let H1 = random(0, 360);
+  let toneDelta1 = random(60, 120);
+  let H2 = (H1 + toneDelta1) % 360;
+  let toneDelta2 = random(60, 120);
+  let H3 = (H2 + toneDelta2) % 360;
+  if (H2 < H1) { H2 += 360; }
+  if (H3 < H2) { H3 += 360; }
+  winSpectrumH1 = H1;
+  winSpectrumH2 = H2;
+  winSpectrumH3 = H3;
+
+  if (chosenBackgroundStyle.name === "blueScreen") {
+    chosenBordiEffect = { name: "none", probability: 1.0 };
+    chosenBackgroundElement = { name: "none", probability: 1.0 };
+    window.drawScrollbars = false;
+  }
+
+  totalFrames = ceil((xEnd - xStart) / baseSpeed);
+  frameEffects = [];  
+  for (let i = 0; i < totalFrames; i++) {
+    let effect = {};
+    if (chosenStepEffect.name === "fragmentation") {
+      if (chosenSpecialEffect.name === "glitch") {
+        effect.fragOffsetX = random(-10, 10) * scaleFactor;
+        effect.fragOffsetY = random(-10, 10) * scaleFactor;
+      } else {
+        effect.fragOffsetX = 0;
+        effect.fragOffsetY = 0;
+      }
+    }
+    if (chosenSpecialEffect.name === "glitch") {
+      effect.applyEffect = (random(1) < 0.6);
+      effect.glitchSlices = [];
+      let numSlices = 20;
+      for (let s = 0; s < numSlices; s++) {
+        let sliceH = 6;
+        let sy = int(random(0, windowH - sliceH));
+        let offsetX = int(random(-30, -10));
+        effect.glitchSlices.push({ sliceH, sy, offsetX });
+      }
+    } else if (chosenSpecialEffect.name === "doubling") {
+      effect.applyEffect = (random(1) < 0.4);
+      effect.doublingValue = random(-300, 300);
+    } else if (chosenSpecialEffect.name === "lineText") {
+      if (random(1) < 0.2) {
+        effect.applyEffect = true;
+        effect.lineTextOffset = random(40, 100);
+        effect.lineTextOffset *= (random() < 0.5 ? -1 : 1);
+        effect.lineTextPhrase = random(textPhrases);
+      } else {
+        effect.applyEffect = false;
+      }
+    } else if (chosenSpecialEffect.name === "sliding") {
+      effect.applyEffect = (random(1) < 0.9);
+    } else {
+      effect.applyEffect = false;
+    }
+    frameEffects.push(effect);
+
+    if (!profilesPrinted) {
+      console.log("Speed Profile: " + chosenSpeedProfile.name);
+      console.log("Wave Count Profile: " + waveCountProfile.name);
+      console.log("Wave Amp Profile: " + chosenAmpProfile.name);
+      console.log("Border Profile: " + bordProfile.name);
+      console.log("Alpha Profile: " + alphaProfile.name);
+      console.log("Window Style: " + chosenWindowStyle.name);
+      console.log("Color Profile: " + chosenColorProfile.name);
+      console.log("Window Dimension Profile: " + chosenWindowProfileDim.name);
+      if (chosenRenderEffect.name === "dithering") {
+        console.log("Dithering Profile: " + chosenDitheringType.name);
+      } else {
+        console.log("Dithering Profile: none");
+      }
+      console.log("Special Effect: " + chosenSpecialEffect.name);
+      console.log("Window Body Element: " + chosenWinBodyElement.name);
+      console.log("Background Style: " + chosenBackgroundStyle.name);
+      console.log("Background Element: " + chosenBackgroundElement.name);
+      console.log("Fragmentation (Step Effect) Profile: " + chosenStepEffect.name);
+
+      profilesPrinted = true;
+    }
+  }
+
+  if (chosenSpecialEffect.name === "glitch" || chosenSpecialEffect.name === "sliding") {
+    scrollBarEffectApply = (random(1) < 0.7);
+  } else if (chosenSpecialEffect.name === "doubling") {
+    scrollBarEffectApply = true;
+  } else {
+    scrollBarEffectApply = false;
+  }
+}
+
+function simulateFinalAnimation() {
+  let totalFrames = ceil((xEnd - xStart) / baseSpeed);
+  for (let i = 0; i < totalFrames; i++) {
+    simulateFrame(i);
+  }
+}
+
+function simulateFrame(frameIndex) {
+  let currX = frameIndex * baseSpeed + xStart;
+  if (currX >= xEnd) return;
+
+  let totalWave = 0;
+  for (let i = 0; i < waveCount; i++) {
+    totalWave += waveAmps[i] * sin(waveFreqs[i] * currX + wavePhases[i]);
+  }
+  let currY = centerY + totalWave;
+ let bodyProfileOverride;
+  if (chosenWinBodyElement.name === "error") {
+    if (frameIndex === totalFrames - 1 || frameIndex % 10 < 7) {
+      bodyProfileOverride = { name: "error" };
+    }
+  }
+  drawWindowStyle(currX, currY, windowW, windowH, chosenColorProfile, titleBarHeight, iconSize);
+
+  if (chosenStepEffect.name === "fragmentation") {
+    if (chosenSpecialEffect.name === "glitch") {
+      let fragOffsetX = frameEffects[frameIndex].fragOffsetX;
+      let fragOffsetY = frameEffects[frameIndex].fragOffsetY;
+      applyFragmentation(currX, currY, windowW, windowH, fragOffsetX, fragOffsetY);
+    } else {
+      applyFragmentation(currX, currY, windowW, windowH);
+    }
+  }
+
+  if (chosenSpecialEffect.name === "glitch") {
+    if (frameEffects[frameIndex].applyEffect) {
+
+      applyGlitch(currX, currY, windowW, windowH, { glitchSlices: frameEffects[frameIndex].glitchSlices });
+    }
+  } else if (chosenSpecialEffect.name === "doubling") {
+    if (frameEffects[frameIndex].applyEffect) {
+      applyDoubling(currX, currY, windowW, windowH, frameEffects[frameIndex].doublingValue);
+    }
+  } else if (chosenSpecialEffect.name === "lineText") {
+    if (frameEffects[frameIndex].applyEffect) {
+      applyLineTextEffect(currX, currY, windowW, windowH, frameEffects[frameIndex]);
+    }
+  }else if (chosenSpecialEffect.name === "sliding") {
+    if (frameEffects[frameIndex].applyEffect) {
+      applySliding(currX, currY, windowW, windowH);
+    }
+  }
+
+  if (chosenRenderEffect.name === "dithering" && chosenDitheringType.name === "progressive") {
+    applyProgressiveDithering();
+  }
+}
+
+function draw() {
+  if (mode === "animation") {
+    let currX = animFrame * baseSpeed + xStart;
+    if (currX >= xEnd) {
+      applyChosenFilter(chosenFilterEffect);
+      applyColorFinalFilter();
+      applyBorderFinalFilter();
+      if (chosenRenderEffect.name === "dithering" && chosenDitheringType.name === "progressive") {
+        applyProgressiveDithering();
+      }
+      noLoop();
+      mode = "final";
+      return;
+    }
+
+    let totalWave = 0;
+    for (let i = 0; i < waveCount; i++) {
+      totalWave += waveAmps[i] * sin(waveFreqs[i] * currX + wavePhases[i]);
+    }
+    let currY = centerY + totalWave;
+
+    drawWindowStyle(currX, currY, windowW, windowH, chosenColorProfile, titleBarHeight, iconSize);
+
+    if (chosenStepEffect.name === "fragmentation") {
+      if (chosenSpecialEffect.name === "glitch") {
+        let fragOffsetX = frameEffects[animFrame].fragOffsetX;
+        let fragOffsetY = frameEffects[animFrame].fragOffsetY;
+        applyFragmentation(currX, currY, windowW, windowH, fragOffsetX, fragOffsetY);
+      } else {
+        applyFragmentation(currX, currY, windowW, windowH);
+      }
+    }
+    if (chosenSpecialEffect.name === "glitch") {
+      if (frameEffects[animFrame].applyEffect) {
+        applyGlitch(currX, currY, windowW, windowH, { glitchSlices: frameEffects[animFrame].glitchSlices });
+      }
+    } else if (chosenSpecialEffect.name === "doubling") {
+      if (frameEffects[animFrame].applyEffect) {
+        applyDoubling(currX, currY, windowW, windowH, frameEffects[animFrame].doublingValue);
+      }
+    } 
+  if (chosenSpecialEffect.name === "lineText") {
+    if (frameEffects[animFrame].applyEffect) {
+      applyLineTextEffect(currX, currY, windowW, windowH, frameEffects[animFrame]);
+    }
+  } else if (chosenSpecialEffect.name === "sliding") {
+      if (frameEffects[animFrame].applyEffect) {
+        applySliding(currX, currY, windowW, windowH);
+      }
+    }
+    if (chosenRenderEffect.name === "dithering" && chosenDitheringType.name === "progressive") {
+      applyProgressiveDithering();
+    }
+
+    animFrame++;
+  }
+}
+
+function computeStaticElements() {
+
+   irregularGridCells = computeIrregularGridCells();
+
+  let minSize = 50 * scaleFactor;
+  let initialRect = { x: 0, y: 0, width: width, height: height };
+  irregularGridCells = shuffle(subdivideRect(initialRect, minSize, minSize));
+
+  let mappedFillAlpha = map(chosenAlpha, 50, 150, 40, 100);
+  colorMode(HSB, 360, 100, 100);
+  let gradStart = color(winSpectrumH1, 80, 80);
+  let gradMid   = color(winSpectrumH2, 80, 80);
+  let gradEnd   = color(winSpectrumH3, 80, 80);
+  gradStart.setAlpha(mappedFillAlpha);
+  gradMid.setAlpha(mappedFillAlpha);
+  gradEnd.setAlpha(mappedFillAlpha);
+  colorMode(RGB, 255);
+  gradImageGlobal = createGradientImage(width, height, gradStart, gradMid, gradEnd);
+
+  verticalThumbOffset = random(-355, 355);
+  horizontalThumbOffset = random(-355, 355);
+
+  let numButtons = int(random(8, 64));
+  windowsButtonsData = []; 
+  for (let i = 0; i < numButtons; i++) {
+    let btnW = random(150, 300) * scaleFactor;
+    let btnH = random(100, 200) * scaleFactor;
+    let x = random(0, width - btnW);
+    let y = random(0, height - btnH);
+    windowsButtonsData.push({ x, y, btnW, btnH });
+  }  
+
+  computeButtonSpectrumData();
+
+  nestedWindowsData = computeNestedWindowsData();
+}
+
+function computeButtonSpectrumData() {
+  buttonSpectrumData = [];
+  let numButtonSpectrum = random(3, 8);  
+  let maxAttempts = 50;       
+
+  for (let i = 0; i < numButtonSpectrum; i++) {
+    let attempts = 0;
+    let candidate;
+    let overlapFound = false;
+
+    do {
+
+      let btnW = random(80, 350);
+      let btnH = random(50, 280);
+
+      let btnX = random(0, width - btnW);
+      let btnY = random(0, height - btnH);
+
+      candidate = { btnX, btnY, btnW, btnH };
+      overlapFound = false;
+
+      for (let p of buttonSpectrumData) {
+        if (rectsOverlap(candidate, p, 10)) {
+          overlapFound = true;
+          break;
+        }
+      }
+      attempts++;
+    } while (overlapFound && attempts < maxAttempts);
+
+    buttonSpectrumData.push(candidate);
+  }
+
+}
+function rectsOverlap(a, b, margin = 10) {
+
+  return !(
+    a.btnX + a.btnW + margin < b.btnX ||
+    a.btnX > b.btnX + b.btnW + margin ||
+    a.btnY + a.btnH + margin < b.btnY ||
+    a.btnY > b.btnY + b.btnH + margin
+  );
+}
+
+function applyChosenFilter(filterProfile) {
+  if (filterProfile.name === "posterizeInvert") {
+
+  }
+}
+
+function drawWindowStyle(x, y, w, h, colorProfile, titleBarHeight, iconSize, drawBody = true) {
+  if (chosenWindowStyle.name === "win98") {
+    push();
+      translate(x - w / 2, y - h / 2);
+      strokeWeight(2 * scaleFactor);
+
+      let bg = color(colorProfile.bgColor);
+      bg.setAlpha(chosenAlpha);
+      fill(bg);
+      stroke(colorProfile.borderHi);
+      rect(0, 0, w, h);
+      stroke(colorProfile.borderLo);
+      line(w, 0, w, h);
+      line(0, h, w, h);
+
+      let titleC = color(colorProfile.titleBar);
+      titleC.setAlpha(chosenAlpha);
+      fill(titleC);
+      noStroke();
+      rect(0, 0, w, titleBarHeight);
+
+      let closeC = color(colorProfile.closeBtn);
+      closeC.setAlpha(chosenAlpha);
+      fill(closeC);
+      let btnSize = titleBarHeight;
+      rect(w - btnSize - (3 * scaleFactor), 2 * scaleFactor, btnSize, btnSize);
+
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(colorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha);
+        stroke(extraC);
+        noFill();
+        rect(0, 0, w, h);
+        rect(0, 0, w, titleBarHeight);
+        rect(w - btnSize - (3 * scaleFactor), 2 * scaleFactor, btnSize, btnSize);
+      }
+
+      if (drawBody) {
+        drawWindowBody(0, titleBarHeight, w, h - titleBarHeight, colorProfile);
+      }
+    pop();
+
+  } else if (chosenWindowStyle.name === "appleLisa") {
+    push();
+      translate(x - w / 2, y - h / 2);
+
+      let winX = 0, winY = 0, winW = w, winH = h;
+      let titleH = titleBarHeight;
+
+      let bg = color(colorProfile.bgColor);
+      bg.setAlpha(chosenAlpha);
+      let titleColor = color(colorProfile.titleBar);
+      titleColor.setAlpha(chosenAlpha);
+      let borderColor = color(colorProfile.borderHi);
+      borderColor.setAlpha(chosenAlpha);
+      let decoColor = color(colorProfile.closeBtn);
+      decoColor.setAlpha(chosenAlpha);
+
+      let shadowOffset = 5 * scaleFactor;
+      let shadowX = winX + shadowOffset;
+      let shadowY = winY + shadowOffset;
+      stroke(borderColor);
+      fill(lerpColor(bg, color(0), 0.3));
+      rect(shadowX, shadowY, winW, winH);
+
+      noStroke();
+      fill(decoColor);
+      let dotSpacing = 2;
+      for (let dx = shadowX + 1; dx < shadowX + winW - 1; dx += dotSpacing) {
+        for (let dy = shadowY + 1; dy < shadowY + winH - 1; dy += dotSpacing) {
+          ellipse(dx, dy, 1, 1);
+        }
+      }
+
+      stroke(borderColor);
+      fill(bg);
+      rect(winX, winY, winW, winH);
+
+      noStroke();
+      fill(titleColor);
+      rect(winX, winY, winW, titleH);
+
+      let numRects = int(random(5, 10));
+      let blackRects = [];
+      for (let i = 0; i < numRects; i++) {
+        if (i === int(numRects / 2)) {
+          blackRects.push(int(random(30, 51)));
+        } else {
+          blackRects.push(int(random(1, 5)));
+        }
+      }
+      let totalRectsWidth = blackRects.reduce((sum, rw) => sum + rw, 0);
+      let totalGaps = blackRects.length - 1;
+      let groupTotalWidth = totalRectsWidth + totalGaps;
+      let minGroupStartX = winX;
+      let maxGroupStartX = winX + winW - groupTotalWidth;
+      let groupStartX = random(minGroupStartX, maxGroupStartX);
+      let rectHeightLocal = titleH * 0.6;
+      let rectYLocal = winY + (titleH - rectHeightLocal) / 2;
+
+      noStroke();
+      fill(decoColor);
+      let currentX = groupStartX;
+      for (let i = 0; i < blackRects.length; i++) {
+        rect(currentX, rectYLocal, blackRects[i], rectHeightLocal);
+        currentX += blackRects[i] + 1;
+      }
+
+if (chosenBorderWeight > 0) {
+  strokeWeight(chosenBorderWeight);
+  let extraC = color(colorProfile.extraBorderColor);
+  extraC.setAlpha(chosenAlpha);
+  stroke(extraC);
+  noFill();
+  rect(winX, winY, winW, winH);
+
+  rect(winX, winY, winW, titleH);
+}
+
+      if (drawBody) {
+        drawWindowBody(0, titleBarHeight, w, h - titleBarHeight, colorProfile);
+      }
+    pop();
+
+  }else if (chosenWindowStyle.name === "apple_new") {
+  push();
+
+    translate(x - w / 2, y - h / 2);
+    let r = 10 * scaleFactor;             
+    let shadowOffset = 5 * scaleFactor;     
+
+    let bg = color(colorProfile.bgColor);
+    bg.setAlpha(chosenAlpha);
+    let borderColor = color(colorProfile.borderHi);
+    borderColor.setAlpha(chosenAlpha);
+
+    noStroke();
+    fill(lerpColor(bg, color(0), 0.3));
+    rect(shadowOffset, shadowOffset, w, h, r);
+
+    strokeWeight(4 * scaleFactor);
+    stroke(borderColor);
+    fill(bg);
+    rect(0, 0, w, h, r);
+
+    if (drawBody) {
+      drawWindowBody(0, 0, w, h, colorProfile);
+    }
+  pop();
+}
+
+ else if (chosenWindowStyle.name === "commodore") {
+    push();
+      translate(x - w / 2, y - h / 2);
+      let winX = 0, winY = 0, winW = w, winH = h;
+      let titleH = titleBarHeight + 5; 
+
+      let baseEven = color(colorProfile.stripeEven ? colorProfile.stripeEven : colorProfile.bgColor);
+      let baseOdd  = color(colorProfile.stripeOdd  ? colorProfile.stripeOdd  : lerpColor(baseEven, color(0), 0.1));
+
+      noStroke();
+      let numStripes = 128;
+      let stripeW = winW / numStripes;
+      for (let i = 0; i < numStripes; i++) {
+        let sx = winX + i * stripeW;
+        fill(i % 2 === 0 ? baseEven : baseOdd);
+        rect(sx, winY, stripeW, winH);
+      }
+
+      stroke(colorProfile.borderHi);
+      noFill();
+      rect(winX, winY, winW, winH);
+
+      let patternSymbol = random() < 0.5 ? "=" : "*";
+      fill(colorProfile.titleBar);
+      textFont("monospace");
+      textAlign(CENTER, CENTER);
+      noStroke();
+      let textMargin = 20;
+      let availableWidth = winW - 2 * textMargin;
+
+      if (patternSymbol === "*") {
+        let baseTextSize = 16;
+        textSize(baseTextSize);
+        let leftPattern = patternSymbol.repeat(4);
+        let rightPattern = patternSymbol.repeat(4);
+        let gap = "     ";
+        let pattern = leftPattern + gap + rightPattern;
+
+        let patternWidth = textWidth(pattern);
+        if (patternWidth > availableWidth) {
+          let scaleFactorText = availableWidth / patternWidth;
+          textSize(baseTextSize * scaleFactorText);
+        }
+
+        let titleCenterY = winY + titleH / 2;
+        text(pattern, winX + winW / 2, titleCenterY);
+
+      } else {
+        let baseTextSize = 30;
+        textSize(baseTextSize);
+        let gap = "          ";
+        let pattern = patternSymbol.repeat(4) + gap + patternSymbol.repeat(4);
+
+        let patternWidth = textWidth(pattern);
+        if (patternWidth > availableWidth) {
+          let scaleFactorText = availableWidth / patternWidth;
+          textSize(baseTextSize * scaleFactorText);
+        }
+
+        let titleLine1Y = winY + titleH / 3;
+        let titleLine2Y = winY + 2 * titleH / 3;
+        text(pattern, winX + winW / 2, titleLine1Y);
+        text(pattern, winX + winW / 2, titleLine2Y);
+      }
+
+      if (drawBody) {
+        drawWindowBody(0, titleBarHeight, w, h - titleBarHeight, colorProfile);
+      }
+    pop();
+
+  } else if (chosenWindowStyle.name === "windows2") {
+
+    push();
+
+      translate(x - w / 2, y - h / 2);
+
+      let bgColor = color(colorProfile.bgColor);
+      bgColor.setAlpha(chosenAlpha);
+      let titleColor = color(colorProfile.titleBar);
+      titleColor.setAlpha(chosenAlpha);
+      let btnColor = color(colorProfile.closeBtn);
+      btnColor.setAlpha(chosenAlpha);
+      let borderColor = color(colorProfile.borderHi);
+      borderColor.setAlpha(chosenAlpha);
+
+      noStroke();
+      fill(bgColor);
+      rect(0, 0, w, h);
+
+      fill(titleColor);
+      rect(0, 0, w, 20 * scaleFactor);
+
+      fill(bgColor);
+      let rectWidth = 0.375 * w;
+      let rectHeight = 15 * scaleFactor;
+      let rectX = (w - rectWidth) / 2;
+      let rectY = ((20 * scaleFactor) - rectHeight) / 2;
+      rect(rectX, rectY, rectWidth, rectHeight);
+
+      stroke(titleColor);
+      strokeWeight(2 * scaleFactor);
+      fill(bgColor);
+      rect(3 * scaleFactor, 3 * scaleFactor, 24 * scaleFactor, 12 * scaleFactor);
+
+      noStroke();
+      fill(btnColor);
+
+      rect(w - (15 * scaleFactor), 3 * scaleFactor, 12 * scaleFactor, 12 * scaleFactor);
+
+      rect(w - (30 * scaleFactor), 3 * scaleFactor, 12 * scaleFactor, 12 * scaleFactor);
+
+      fill(bgColor);
+      stroke(titleColor);
+      strokeWeight(2 * scaleFactor);
+      rect(0, 20 * scaleFactor, w, 15 * scaleFactor);
+
+      noStroke();
+      fill(bgColor);
+      rect(0, 55 * scaleFactor, w, h - (55 * scaleFactor));
+
+      noFill();
+      stroke(borderColor);
+      strokeWeight(2 * scaleFactor);
+      rect(0, 0, w, h);
+
+      push();
+        let dotSpacing = 4 * scaleFactor;
+        let dotSize = 2 * scaleFactor;
+        let borderMargin = 5 * scaleFactor;
+
+        for (let dx = -borderMargin; dx <= w + borderMargin; dx += dotSpacing) {
+          ellipse(dx, -borderMargin, dotSize, dotSize);
+        }
+
+        for (let dx = -borderMargin; dx <= w + borderMargin; dx += dotSpacing) {
+          ellipse(dx, h + borderMargin, dotSize, dotSize);
+        }
+
+        for (let dy = -borderMargin; dy <= h + borderMargin; dy += dotSpacing) {
+          ellipse(-borderMargin, dy, dotSize, dotSize);
+        }
+
+        for (let dy = -borderMargin; dy <= h + borderMargin; dy += dotSpacing) {
+          ellipse(w + borderMargin, dy, dotSize, dotSize);
+        }
+    if (drawBody) {
+        drawWindowBody(0, titleBarHeight, w, h - titleBarHeight, colorProfile);
+      }
+      pop();
+    pop();
+
+  }
+
+}
+
+function drawWindowBody(x, y, w, h, colorProfile) {
+  let bodyProfile = chosenWinBodyElement;
+
+  if (bodyProfile.name === "text") {
+
+    push();
+      blendMode(BLEND);
+      noStroke();
+      textFont("monospace");
+      textSize(8 * scaleFactor);
+      let textAlpha = map(chosenAlpha, 50, 150, 60, 150);
+      let txtCol = color(colorProfile.winText);
+      txtCol.setAlpha(textAlpha);
+
+    stroke(txtCol);          
+    strokeWeight(0.5 * scaleFactor);               
+    noFill();       textAlign(LEFT, TOP);
+
+      let numLines = floor(random(5, 33));
+      let bodyMargin = 5 * scaleFactor;
+      let startX = x + bodyMargin;
+      let startY = y + bodyMargin;
+      let lineSpacing = 10 * scaleFactor;
+
+      for (let i = 0; i < numLines; i++) {
+        let currentY = startY + i * lineSpacing;
+        if (currentY > y + h - 15 * scaleFactor) break;
+
+        let textToPrint = "";
+        if (random() < 0.5) {
+          let count = floor(random(1, 16));
+          textToPrint = "#".repeat(count);
+        } else {
+        textToPrint = selectedPhrase;
+
+        }
+        if (random() < 0.3 && textToPrint.length > 0) {
+          let indexToReplace = floor(random(textToPrint.length));
+          textToPrint = textToPrint.substring(0, indexToReplace) + " " + textToPrint.substring(indexToReplace + 1);
+        }
+        text(textToPrint, startX, currentY);
+      }
+    pop();
+
+  } else if (bodyProfile.name === "bluescreen") {
+
+    push();
+
+      let margin = 1 * scaleFactor;
+      let rectX = x + margin;
+      let rectY = y + margin;
+      let rectW = w - 2 * margin;
+      let rectH = h - 2 * margin;
+
+      let bsodBg = color(chosenColorProfile.sod);
+      bsodBg.setAlpha(chosenAlpha);
+      noStroke();
+      fill(bsodBg);
+      rect(rectX, rectY, rectW, rectH);
+
+      let txt = "Unable to find\nSquiddies.dll";
+      textAlign(CENTER, CENTER);
+      textFont("monospace");
+      let txtSize = 5 * scaleFactor; 
+      textSize(txtSize);
+      let txtCol = color(chosenColorProfile.sotText); 
+      txtCol.setAlpha(chosenAlpha);
+      fill(txtCol);
+      noStroke();
+      text(txt, rectX + rectW/2, rectY + rectH/2);
+
+      let mappedAlpha = map(chosenAlpha, 50, 150, 50, 155);
+      noFill();
+      if (chosenWindowStyle.name === "appleLisa") {
+        let mappedAlphaLisa = map(chosenAlpha, 50, 150, 100, 150);
+        let borderColLisa = color(chosenColorProfile.borderHi);
+        borderColLisa.setAlpha(mappedAlphaLisa);
+        strokeWeight(1 * scaleFactor);
+        stroke(borderColLisa);
+        rect(rectX, rectY, rectW, rectH);
+      } else if (chosenWindowStyle.name === "win98") {
+        strokeWeight(2 * scaleFactor);
+        let borderCol = color(chosenColorProfile.borderHi);
+        borderCol.setAlpha(mappedAlpha);
+        stroke(borderCol);
+        rect(rectX, rectY, rectW, rectH);
+      } else if (chosenWindowStyle.name === "commodore") {
+        strokeWeight(1 * scaleFactor);
+        let borderCol = color(chosenColorProfile.borderHi);
+        borderCol.setAlpha(mappedAlpha);
+        stroke(borderCol);
+        rect(rectX, rectY, rectW, rectH);
+      } else if (chosenWindowStyle.name === "windows2") {
+        strokeWeight(2 * scaleFactor);
+        let borderCol = color(chosenColorProfile.borderHi);
+        borderCol.setAlpha(mappedAlpha);
+        stroke(borderCol);
+        rect(rectX, rectY, rectW, rectH);
+      } else if (chosenWindowStyle.name === "apple_new") {
+        strokeWeight(4 * scaleFactor);
+        let borderCol = color(chosenColorProfile.borderHi);
+        borderCol.setAlpha(mappedAlpha);
+        stroke(borderCol);
+        rect(rectX, rectY, rectW, rectH, 5 * scaleFactor);
+      } else {
+        strokeWeight(3 * scaleFactor);
+        let borderCol = color(chosenColorProfile.borderHi);
+        borderCol.setAlpha(mappedAlpha);
+        stroke(borderCol);
+        rect(rectX, rectY, rectW, rectH);
+      }
+    pop();
+  } else if (bodyProfile.name === "spectrum") {
+  push();
+
+    let margin = 5 * scaleFactor;
+    let rectX = x + margin;
+    let rectY = y + margin;
+    let rectW = w - 2 * margin;
+    let rectH = h - 2 * margin;
+
+    colorMode(HSB, 360, 100, 100);
+    let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+    let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+
+    for (let i = 0; i < rectH; i++) {
+      let factor = i / rectH;
+      let currentHue;
+      if (factor < 0.5) {
+        currentHue = lerp(winSpectrumH1, winSpectrumH2, factor * 2) % 360;
+      } else {
+        currentHue = lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2) % 360;
+      }
+      let c = color(currentHue, effectiveSat, effectiveBright);
+
+      c.setAlpha(chosenAlpha);
+      stroke(c);
+      line(rectX, rectY + i, rectX + rectW, rectY + i);
+    }
+    colorMode(RGB, 255);
+
+    let mappedAlpha = map(chosenAlpha, 50, 150, 50, 155);
+
+    noFill();
+    if (chosenWindowStyle.name === "appleLisa") {
+
+      let mappedAlphaLisa = map(chosenAlpha, 50, 150, 100, 150);
+      let borderColLisa = color(chosenColorProfile.borderHi);
+      borderColLisa.setAlpha(mappedAlphaLisa);
+      strokeWeight(1 * scaleFactor); 
+      stroke(borderColLisa);
+      rect(rectX, rectY, rectW, rectH);
+    } else if (chosenWindowStyle.name === "win98") {
+      strokeWeight(2 * scaleFactor);
+      let borderCol = color(chosenColorProfile.borderHi);
+      borderCol.setAlpha(mappedAlpha);
+      stroke(borderCol);
+      rect(rectX, rectY, rectW, rectH);
+    } else if (chosenWindowStyle.name === "commodore") {
+      strokeWeight(1 * scaleFactor);
+      let borderCol = color(chosenColorProfile.borderHi);
+      borderCol.setAlpha(mappedAlpha);
+      stroke(borderCol);
+      rect(rectX, rectY, rectW, rectH);
+    } else if (chosenWindowStyle.name === "windows2") {
+      strokeWeight(2 * scaleFactor);
+      let borderCol = color(chosenColorProfile.borderHi);
+      borderCol.setAlpha(mappedAlpha);
+      stroke(borderCol);
+      rect(rectX, rectY, rectW, rectH);
+    } else if (chosenWindowStyle.name === "apple_new") {
+      strokeWeight(4 * scaleFactor);
+      let borderCol = color(chosenColorProfile.borderHi);
+      borderCol.setAlpha(mappedAlpha);
+      stroke(borderCol);
+      rect(rectX, rectY, rectW, rectH, 5 * scaleFactor);
+    } else {
+
+      strokeWeight(3 * scaleFactor);
+      let borderCol = color(chosenColorProfile.borderHi);
+      borderCol.setAlpha(mappedAlpha);
+      stroke(borderCol);
+      rect(rectX, rectY, rectW, rectH);
+    }
+  pop();
+}
+
+ else if (bodyProfile.name === "button") {
+   push();
+
+    let outerW = w * 0.9;
+    let outerH = h * 0.7;
+
+    let outerX = x + (w - outerW) / 2;
+    let outerY = y + (h - outerH) / 2;
+
+    if (chosenWindowStyle.name === "windows2") {
+      drawWindowsButton(outerX, outerY, outerW, outerH, true);
+    } else {
+      drawWindowsButton(outerX, outerY, outerW, outerH);
+    }
+
+    let innerMargin = 0.1 * outerW;
+    let innerW = outerW - 2 * innerMargin;
+    let innerH = outerH - 2 * innerMargin;
+    let innerX = outerX + innerMargin;
+    let innerY = outerY + innerMargin;
+
+    if (chosenWindowStyle.name === "windows2") {
+      drawWindowsButton(innerX, innerY, innerW, innerH, true);
+    } else {
+      drawWindowsButton(innerX, innerY, innerW, innerH);
+    }
+  pop();
+
+  }else if (bodyProfile.name === "squareprogress") {
+  push();
+
+    let numSquares = 10;
+
+    let pbW = w * 0.8;
+
+    let squareSize = pbW / numSquares;
+
+    let pbX = x + (w - pbW) / 2;
+    let pbY = y + (h - squareSize) / 2;
+
+    let fillPerc = random(0.3, 0.99);
+
+    let squaresFilled = floor(numSquares * fillPerc);
+
+    let filledColor;
+    if (chosenColorProfile.bodyElement2) {
+      filledColor = color(chosenColorProfile.bodyElement2);
+    } else {
+      filledColor = color(0, 0, 155);
+    }
+
+    let mappedAlpha = map(chosenAlpha, 50, 150, 50, 155);
+    filledColor.setAlpha(mappedAlpha);
+
+    let emptyColor = color(200, 200, 200, mappedAlpha);
+
+    noStroke();
+
+    let gap = 2 * scaleFactor;
+    for (let i = 0; i < numSquares; i++) {
+      let sx = pbX + i * squareSize;
+      if (i < squaresFilled) {
+        fill(filledColor);
+      } else {
+        fill(emptyColor);
+      }
+      rect(sx, pbY, squareSize - gap, squareSize - gap);
+    }
+
+    noFill();
+    let bColor = color(chosenColorProfile.borderHi);
+    bColor.setAlpha(mappedAlpha);
+
+    if (chosenWindowStyle.name === "apple_new") {
+      stroke(bColor);
+      strokeWeight(4 * scaleFactor);
+      rect(pbX, pbY, pbW, squareSize, 5 * scaleFactor);
+    } else if (chosenWindowStyle.name === "appleLisa") {
+      stroke(bColor);
+      strokeWeight(3 * scaleFactor);
+      rect(pbX, pbY, pbW, squareSize, 3 * scaleFactor);
+    } else {
+      stroke(bColor);
+      strokeWeight(2 * scaleFactor);
+      rect(pbX, pbY, pbW, squareSize);
+    }
+  pop();
+}
+else if (bodyProfile.name === "progressBar") {
+  push();
+
+    let pbW = w * 0.8;
+    let pbH = h * 0.22;
+
+    let pbX = x + (w - pbW) / 2;
+    let pbY = y + (h - pbH) / 2;
+
+    let fillPerc = random(0.3, 0.99);
+
+    noStroke();
+
+    let pbColor;
+    if (chosenColorProfile.bodyElement2) {
+      pbColor = color(chosenColorProfile.bodyElement2);
+    } else {
+      pbColor = color(0, 0, 155);
+    }
+
+    let mappedAlpha = map(chosenAlpha, 50, 150, 50, 150);
+    pbColor.setAlpha(mappedAlpha);
+    fill(pbColor);
+    rect(pbX, pbY, pbW * fillPerc, pbH);
+
+    noFill();
+    let bColor = color(chosenColorProfile.borderHi);
+    bColor.setAlpha(mappedAlpha);
+    if (chosenWindowStyle.name === "apple_new") {
+      stroke(bColor);
+      strokeWeight(4 * scaleFactor);
+      rect(pbX, pbY, pbW, pbH, 5 * scaleFactor);
+    } else {
+      stroke(bColor);
+      strokeWeight(2 * scaleFactor);
+      rect(pbX, pbY, pbW, pbH);
+    }
+  pop();
+ }else if (bodyProfile.name === "error") {
+  push();
+
+    let margin = 7 * scaleFactor;
+    let btnW = w * 0.8;
+    let btnH = h * 0.55;
+    let posX = x + margin + random(0, w - btnW - 2 * margin);
+    let posY = y + margin + random(0, h - btnH - 2 * margin);
+    errorTile(posX, posY, btnW, btnH);
+  pop();
+  }
+  else {
+
+  }
+}
+
+function drawScrollBars() {
+
+  if (chosenBordiEffect.name === "none") {
+    return;
+  }
+  let vBarWidth = 20 * scaleFactor;
+  if (verticalScrollBarPosition === "left") {
+    drawScrollBar(0, 0, vBarWidth, height, "vertical");
+  } else {
+    drawScrollBar(width - vBarWidth, 0, vBarWidth, height, "vertical");
+  }
+
+  let hBarHeight = 20 * scaleFactor;
+  if (horizontalScrollBarPosition === "top") {
+    drawScrollBar(0, 0, width, hBarHeight, "horizontal");
+  } else {
+    drawScrollBar(0, height - hBarHeight, width, hBarHeight, "horizontal");
+  }
+}
+
+function drawScrollBar(x, y, w, h, orientation) {
+
+  if (chosenBordiEffect.name === "none") {
+    return;
+  }
+  push();
+  translate(x, y);
+
+  let sbColor = color(chosenColorProfile.bckelement1 || "#c0c0c0");
+  sbColor.setAlpha(chosenAlpha);
+  fill(sbColor);
+  noStroke();
+  rect(0, 0, w, h);
+
+  let arrowColor = color(chosenColorProfile.bckelement2 || "#000000");
+  arrowColor.setAlpha(chosenAlpha);
+stroke(arrowColor);
+  fill(arrowColor);
+  let arrowSize = 10 * scaleFactor;
+
+  if (orientation === "vertical") {
+    triangle(w/2, arrowSize/2, w/2 - arrowSize/2, arrowSize, w/2 + arrowSize/2, arrowSize);
+    triangle(w/2, h - arrowSize/2, w/2 - arrowSize/2, h - arrowSize, w/2 + arrowSize/2, h - arrowSize);
+  } else {
+    triangle(arrowSize/2, h/2, arrowSize, h/2 - arrowSize/2, arrowSize, h/2 + arrowSize/2);
+    triangle(w - arrowSize/2, h/2, w - arrowSize, h/2 - arrowSize/2, w - arrowSize, h/2 + arrowSize/2);
+  }
+
+  if (orientation === "vertical") {
+  let thumbLength = h / 4;
+  let baseY = (h - thumbLength) / 2;
+  let thumbY = constrain(baseY + verticalThumbOffset, 0, h - thumbLength);
+  fill(arrowColor);
+  if (chosenWindowStyle.name === "apple_new") {
+
+    rect(2, thumbY, w - 4, thumbLength, 10 * scaleFactor);
+  } else {
+    rect(2, thumbY, w - 4, thumbLength);
+  }
+} else {
+  let thumbLength = w / 4;
+  let baseX = (w - thumbLength) / 2;
+  let thumbX = constrain(baseX + horizontalThumbOffset, 0, w - thumbLength);
+  fill(arrowColor);
+  if (chosenWindowStyle.name === "apple_new") {
+
+    rect(thumbX, 2, thumbLength, h - 4, 10 * scaleFactor);
+  } else {
+    rect(thumbX, 2, thumbLength, h - 4);
+  }
+}
+
+  pop();
+
+  if (chosenSpecialEffect.name === "glitch" && scrollBarEffectApply) {
+    applyGlitch(x + w/2, y + h/2, w, h);
+  } else if (chosenSpecialEffect.name === "doubling") {
+    applyDoublingScrollBar(x, y, w, h, orientation);
+  } else if (chosenSpecialEffect.name === "sliding" && scrollBarEffectApply) {
+    applySliding(x + w/2, y + h/2, w, h);
+  }
+
+  if (chosenRenderEffect.name === "dithering" && chosenDitheringType.name === "progressive") {
+    push();
+    blendMode(BLEND);
+    noSmooth();
+    let adjustedAlpha = map(baseSpeed, 6, 12, 180, 250);
+    tint(255, adjustedAlpha);
+    image(ditherPattern, x, y, w, h);
+    blendMode(BLEND);
+    pop();
+  }
+}
+
+function applyDoublingScrollBar(x, y, w, h, orientation) {
+  let scrollBarImg = get(x, y, w, h);
+  push();
+  tint(255, 80);
+  if (orientation === "vertical") {
+    let offsetX = (verticalScrollBarPosition === "left") ? doublingScrollOffsetVertical : -doublingScrollOffsetVertical;
+    image(scrollBarImg, x + offsetX, y);
+  } else {
+    let offsetY = (horizontalScrollBarPosition === "top") ? doublingScrollOffsetHorizontal : -doublingScrollOffsetHorizontal;
+    image(scrollBarImg, x, y + offsetY);
+  }
+  pop();
+}
+
+function applyGlitch(centerX, centerY, w, h, glitchData) {
+  let x = centerX - w / 2;
+  let y = centerY - h / 2;
+  let extraMargin = 200;
+  let pg = createGraphics(w + extraMargin, h);
+  pg.pixelDensity(1);
+
+  let bufferOffset = extraMargin / 1;
+  let windowImg = get(x, y, w, h);
+  pg.image(windowImg, bufferOffset, 0);
+
+  let glitchSlices;
+  if (glitchData && glitchData.glitchSlices) {
+    glitchSlices = glitchData.glitchSlices;
+  } else {
+    glitchSlices = [];
+    let numSlices = 3;
+    for (let s = 0; s < numSlices; s++) {
+      let sliceH = 4;
+      let sy = int(random(0, h - sliceH));
+      let offsetX = int(random(-20, 20));
+      glitchSlices.push({ sliceH, sy, offsetX });
+    }
+  }
+
+  for (let s = 0; s < glitchSlices.length; s++) {
+    let { sliceH, sy, offsetX } = glitchSlices[s];
+    pg.copy(bufferOffset, sy, w, sliceH,
+            bufferOffset + offsetX, sy, w, sliceH);
+    pg.tint(255, 0, 0, 100);
+    pg.copy(bufferOffset, sy, w, sliceH,
+            bufferOffset + offsetX + 3, sy, w, sliceH);
+    pg.noTint();
+
+    pg.tint(0, 0, 255, 100);
+    pg.copy(bufferOffset, sy, w, sliceH,
+            bufferOffset + offsetX - 3, sy, w, sliceH);
+    pg.noTint();
+  }
+
+  let drawX = centerX - (w + extraMargin) / 2;
+  let drawY = centerY - h / 2;
+  image(pg, drawX, drawY);
+}
+
+function applyDoubling(centerX, centerY, w, h, doublingValue) {
+  let x = centerX - w / 2;
+  let y = centerY - h / 2;
+  let windowImg = get(x, y, w, h);
+
+  push();
+  tint(205, 80);
+
+  if (doublingValue === undefined) {
+    doublingValue = random(-200, 200);
+  }
+  image(windowImg, x, y + doublingValue * scaleFactor);
+  pop();
+}
+
+function applySliding(centerX, winCenterY, w, h) {
+  let x = centerX - w / 2;
+  let y = winCenterY - h / 2;
+  let dragDistance = winCenterY - centerY;
+  let windowImg = get(x, y, w, h);
+
+  let steps = 5;
+  for (let i = 0; i < steps; i++) {
+    let t = i / (steps - 1);
+    let ghostY = lerp(y - dragDistance, y, t) + deltaSliding;
+    let ghostAlpha = lerp(10, 100, t);
+
+    push();
+    tint(255, ghostAlpha);
+    image(windowImg, x, ghostY);
+    pop();
+  }
+}
+
+function applyFragmentation(x, y, w, h, offsetX = 0, offsetY = 0) {
+  let cellSize = 3;
+  let pgMask = createGraphics(w, h);
+  pgMask.pixelDensity(1);
+  pgMask.clear();
+
+  let removedCells = [];
+  let threshold = 10;
+
+  for (let j = 0; j < h; j += cellSize) {
+    for (let i = 0; i < w; i += cellSize) {
+      let d = min(i, j, w - i - cellSize, h - j - cellSize);
+      let removalProb = constrain(1 - (d / threshold), 0, 1);
+      if (random() < removalProb) {
+        pgMask.noStroke();
+        pgMask.fill(255);
+        pgMask.rect(i, j, cellSize, cellSize);
+        removedCells.push({ i, j });
+      }
+    }
+  }
+  pgMask.updatePixels();
+
+  push();
+  translate(x - w / 2 + offsetX, y - h / 2 + offsetY);
+  blendMode(MULTIPLY);
+  image(pgMask, 0, 0);
+  blendMode(BLEND);
+  pop();
+
+  removedCells.sort((a, b) => a.i === b.i ? a.j - b.j : a.i - b.i);
+
+  push();
+  translate(x - w / 2 + offsetX, y - h / 2 + offsetY);
+  strokeWeight(1);
+  colorMode(HSB, 360, 100, 100, 100);
+  for (let idx = 0; idx < removedCells.length; idx++) {
+    let cell = removedCells[idx];
+    let hueVal = map(idx, 0, removedCells.length - 1, 0, 360);
+    stroke(hueVal, 100, 100, 40);
+    noFill();
+    rect(cell.i, cell.j, cellSize, cellSize);
+  }
+  colorMode(RGB, 255);
+  pop();
+}
+
+function createDitherPattern(w, h, squareSize = 1, patternAlpha = 40) {
+  let pg = createGraphics(w, h);
+  pg.pixelDensity(1);
+  pg.loadPixels();
+
+  for (let y = 0; y < h; y += squareSize) {
+    for (let x = 0; x < w; x += squareSize) {
+      let blockX = x / squareSize;
+      let blockY = y / squareSize;
+
+      let val = ((blockX + blockY) % 2 === 0) ? 240 : 255;
+
+      for (let dy = 0; dy < squareSize; dy++) {
+        for (let dx = 0; dx < squareSize; dx++) {
+          let px = x + dx;
+          let py = y + dy;
+          if (px < w && py < h) {
+            let index = 4 * (py * w + px);
+            pg.pixels[index] = val;
+            pg.pixels[index + 1] = val;
+            pg.pixels[index + 2] = val;
+            pg.pixels[index + 3] = patternAlpha;
+          }
+        }
+      }
+    }
+  }
+
+  pg.updatePixels();
+  return pg;
+}
+
+function applyProgressiveDithering() {
+  push();
+  blendMode(MULTIPLY);
+  noSmooth();
+  let adjustedAlpha = map(baseSpeed, 6, 12, 100, 200);
+  tint(255, adjustedAlpha);
+  image(ditherPattern, 0, 0, width, height);
+  blendMode(BLEND);
+  pop();
+}
+
+function applyColorFinalFilter() {
+  if (chosenColorFinalFilter.name === "inverse") {
+    filter(INVERT);
+  }
+}
+
+function applyBorderFinalFilter() {
+   let lvPosterize;
+  if (chosenColorProfile.posterizationValues) {
+    lvPosterize = random(chosenColorProfile.posterizationValues);
+  }
+  console.log("lvPosterize:", lvPosterize);
+  filter(POSTERIZE, lvPosterize);
+}
+
+function keyPressed() {
+  if (key === 'r' || key === 'R') {
+
+    randomSeed(seedValue);
+    clear();
+    background(chosenColorProfile.canvasBg);
+
+    if (chosenBackgroundStyle.name === "blueScreen") {
+  drawBlueScreen();
+} else if (chosenBackgroundStyle.name === "verticalTable") {
+      drawVerticalTable();
+    } else if (chosenBackgroundStyle.name === "horizTable") {
+      drawHorizTable();
+    } else if (chosenBackgroundStyle.name === "asciiArt") {
+
+      image(asciiBg, 0, 0);
+    }else if (chosenBackgroundStyle.name === "irregularGrid") {
+
+  drawIrregularGrid();
+} else if (chosenBackgroundStyle.name === "gradientRGB") {
+  drawIrregularGridGradient();
+}else if(chosenBackgroundStyle.name === "tron") {
+    tronParams = computeTronParams();
+  } else if (chosenBackgroundStyle.name === "wheels") {
+      let r = 499;
+      let cx = width / 2;
+      let cy = height / 2;
+      drawHorizontalColorWheel(cx, cy, r);
+      drawWindowsEllipseBorder(cx, cy, r);
+    }  else if (chosenBackgroundStyle.name === "squarewheels") {
+
+  let side = 800;  
+  let cx = width / 2;
+  let cy = height / 2;
+  drawSquareWheels(cx, cy, side);
+      drawWindowsSquareBorder(cx, cy, side);
+
+  push();
+    strokeWeight(2 * scaleFactor);
+    let borderC = color(chosenColorProfile.borderHi);
+    borderC.setAlpha(chosenAlpha);
+    stroke(borderC);
+    noFill();
+    rect(cx - side/2, cy - side/2, side, side);
+  pop();
+} else  if (chosenBackgroundStyle.name === "columnwheels") {
+  drawColumnWheelsFromParams(columnWheelsParams);
+} else if (chosenBackgroundStyle.name === "rowwheels") {
+  drawRowWheelsFromParams(rowWheelsParams);
+}
+
+if (chosenBackgroundElement.name === "windowsButtons" && chosenWindowStyle.name !== "commodore") {
+      drawWindowsButtons();
+    } else if (chosenBackgroundElement.name === "nestedWindows") {
+      drawNestedWindows();
+    }else if (chosenBackgroundElement.name === "editwindow") {
+  drawEditWindows();   
+}else if (chosenBackgroundElement.name === "buttonspectrum") {
+  drawButtonSpectrum();
+}
+
+    if (chosenBordiEffect.name === "scrollBars") {
+      drawScrollBars();
+    }
+
+    mode = "animation";
+    animFrame = 0;
+    loop();
+  }
+}
+
+function drawWindowBorderStyle(x, y, w, h) {
+  if (chosenWindowStyle.name === "win98") {
+    strokeWeight(2 * scaleFactor);
+    stroke(chosenColorProfile.borderHi);
+    noFill();
+    rect(x, y, w, h);
+    stroke(chosenColorProfile.borderLo);
+    line(x + w, y, x + w, y + h);
+    line(x, y + h, x + w, y + h);
+
+    if (chosenBorderWeight > 0) {
+      strokeWeight(chosenBorderWeight);
+      let extraC = color(chosenColorProfile.extraBorderColor);
+      extraC.setAlpha(chosenAlpha);
+      stroke(extraC);
+      noFill();
+      rect(x, y, w, h);
+    }
+
+  } else if (chosenWindowStyle.name === "appleLisa") {
+    strokeWeight(chosenBorderWeight > 0 ? chosenBorderWeight : (2 * scaleFactor));
+    let borderColor = color(chosenColorProfile.borderHi);
+    borderColor.setAlpha(chosenAlpha);
+    stroke(borderColor);
+    noFill();
+    rect(x, y, w, h);
+
+  } else if (chosenWindowStyle.name === "commodore") {
+    strokeWeight(1 * scaleFactor);
+    stroke(chosenColorProfile.borderHi);
+    noFill();
+    rect(x, y, w, h);
+  }
+}
+
+function drawWindowsEllipseBorder(cx, cy, r) {
+  push();
+  strokeWeight(2 * scaleFactor);
+  stroke(chosenColorProfile.borderHi);
+  noFill();
+  ellipse(cx, cy, 2 * r, 2 * r);
+
+  if (chosenBorderWeight > 0) {
+    strokeWeight(chosenBorderWeight);
+    let extraC = color(chosenColorProfile.extraBorderColor);
+    extraC.setAlpha(chosenAlpha);
+    stroke(extraC);
+    noFill();
+    ellipse(cx, cy, 2 * r, 2 * r);
+  }
+  pop();
+}
+
+function drawHorizontalColorWheel(cx, cy, r) {
+  push();
+  translate(cx, cy);
+  colorMode(HSB, 360, 100, 100);
+  let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+  let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+  noStroke();
+  for (let x = -r; x <= r; x++) {
+    let factor = (x + r) / (2 * r);
+    let hueVal;
+    if (factor < 0.5) {
+      hueVal = lerp(winSpectrumH1, winSpectrumH2, factor * 2);
+    } else {
+      hueVal = lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2);
+    }
+    let yExtent = sqrt(r * r - x * x);
+    let c = color(hueVal, effectiveSat, effectiveBright);
+    c.setAlpha(chosenAlpha);
+    fill(c);
+    noStroke();
+    rect(x, -yExtent, 1, 2 * yExtent);
+  }
+  colorMode(RGB, 255);
+  pop();
+}
+
+function drawVerticalTable() {
+  push();
+  colorMode(HSB, 360, 100, 100);
+  let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+  let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+  noStroke();
+  for (let y = 0; y < height; y++) {
+    let factor = y / height;
+    let hueVal;
+    if (factor < 0.5) {
+      hueVal = lerp(winSpectrumH1, winSpectrumH2, factor * 2) % 360;
+    } else {
+      hueVal = lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2) % 360;
+    }
+    let c = color(hueVal, effectiveSat, effectiveBright);
+    c.setAlpha(chosenAlpha);
+    stroke(c);
+    line(0, y, width, y);
+  }
+  colorMode(RGB, 255);
+  pop();
+}
+
+function drawHorizTable() {
+  push();
+  colorMode(HSB, 360, 100, 100);
+  let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+  let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+  noStroke();
+  for (let x = 0; x < width; x++) {
+    let factor = x / width;
+    let hueVal;
+    if (factor < 0.5) {
+      hueVal = lerp(winSpectrumH1, winSpectrumH2, factor * 2) % 360;
+    } else {
+      hueVal = lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2) % 360;
+    }
+    let c = color(hueVal, effectiveSat, effectiveBright);
+    c.setAlpha(chosenAlpha);
+    stroke(c);
+    line(x, 0, x, height);
+  }
+  colorMode(RGB, 255);
+  pop();
+}
+
+function drawDashedRect(x, y, w, h, dashLength, gapLength) {
+
+  for (let i = 0; i < w; i += dashLength + gapLength) {
+    let xStart = x + i;
+    let xEnd = min(x + w, x + i + dashLength);
+    line(xStart, y, xEnd, y);
+  }
+
+  for (let i = 0; i < w; i += dashLength + gapLength) {
+    let xStart = x + i;
+    let xEnd = min(x + w, x + i + dashLength);
+    line(xStart, y + h, xEnd, y + h);
+  }
+
+  for (let i = 0; i < h; i += dashLength + gapLength) {
+    let yStart = y + i;
+    let yEnd = min(y + h, y + i + dashLength);
+    line(x, yStart, x, yEnd);
+  }
+
+  for (let i = 0; i < h; i += dashLength + gapLength) {
+    let yStart = y + i;
+    let yEnd = min(y + h, y + i + dashLength);
+    line(x + w, yStart, x + w, yEnd);
+  }
+}
+
+function drawWindowsButton(x, y, w, h) { if (typeof isBody === 'undefined') {
+    isBody = false;
+  }
+  push();
+    if (chosenWindowStyle.name === "windows2") {
+      if (isBody) {
+
+        let bgColor = color(chosenColorProfile.bgColor);
+        bgColor.setAlpha(chosenAlpha);
+        let borderColor = color(chosenColorProfile.borderHi);
+
+        borderColor.setAlpha(chosenAlpha);
+
+        noStroke();
+        fill(bgColor);
+        rect(x, y, w, h);
+        noFill();
+        stroke(borderColor);
+        strokeWeight(2 * scaleFactor);
+        rect(x, y, w, h);
+      } else {
+
+        let bgColor = color(chosenColorProfile.bgColor);
+        bgColor.setAlpha(chosenAlpha);
+        let titleColor = color(chosenColorProfile.titleBar);
+        titleColor.setAlpha(chosenAlpha);
+        let btnColor = color(chosenColorProfile.closeBtn);
+        btnColor.setAlpha(chosenAlpha);
+        let borderColor = color(chosenColorProfile.borderHi);
+        borderColor.setAlpha(chosenAlpha);
+
+        noStroke();
+        fill(bgColor);
+        rect(x, y, w, h);
+
+        fill(titleColor);
+        rect(x, y, w, 0.2 * h);
+
+        fill(bgColor);
+        let innerRectWidth = 0.375 * w;
+        let innerRectHeight = 0.15 * h;
+        let innerRectX = x + (w - innerRectWidth) / 2;
+        let innerRectY = y + (0.2 * h - innerRectHeight) / 2;
+        rect(innerRectX, innerRectY, innerRectWidth, innerRectHeight);
+
+        noFill();
+        stroke(borderColor);
+        strokeWeight(2 * scaleFactor);
+        rect(x, y, w, h);
+
+        push();
+          let dotSpacing = 4 * scaleFactor;
+          let dotSize = 2 * scaleFactor;
+          let borderMargin = 5 * scaleFactor;
+          for (let dx = x - borderMargin; dx <= x + w + borderMargin; dx += dotSpacing) {
+            ellipse(dx, y - borderMargin, dotSize, dotSize);
+          }
+          for (let dx = x - borderMargin; dx <= x + w + borderMargin; dx += dotSpacing) {
+            ellipse(dx, y + h + borderMargin, dotSize, dotSize);
+          }
+          for (let dy = y - borderMargin; dy <= y + h + borderMargin; dy += dotSpacing) {
+            ellipse(x - borderMargin, dy, dotSize, dotSize);
+          }
+          for (let dy = y - borderMargin; dy <= y + h + borderMargin; dy += dotSpacing) {
+            ellipse(x + w + borderMargin, dy, dotSize, dotSize);
+          }
+        pop();
+      }}  else if (chosenWindowStyle.name === "appleLisa") {
+
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+      let borderColor = color(chosenColorProfile.borderHi);
+      borderColor.setAlpha(chosenAlpha);
+
+      let shadowOffset = 5 * scaleFactor;
+      noStroke();
+      let shadowColor = lerpColor(btnFill, color(0), 0.3);
+      fill(shadowColor);
+      rect(x + shadowOffset, y + shadowOffset, w, h);
+
+      strokeWeight(1.5 * scaleFactor);
+      stroke(borderColor);
+      fill(btnFill);
+      rect(x, y, w, h);
+
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(chosenColorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha/2);
+        stroke(extraC);
+        noFill();
+        rect(x, y, w, h);
+      }
+
+      let decoHeight = 0.3 * h;         
+      let decoY = y + (h - decoHeight) / 2;
+
+      let numRects = int(random(3, 7));
+      let rectWidths = [];
+      for (let i = 0; i < numRects; i++) {
+        if (i === int(numRects / 2)) {
+
+          rectWidths.push(random(0.3 * w, 0.5 * w));
+        } else {
+          rectWidths.push(random(0.02 * w, 0.1 * w));
+        }
+      }
+      let totalRectsWidth = rectWidths.reduce((sum, val) => sum + val, 0);
+      let gap = 2 * scaleFactor; 
+      let totalGaps = (numRects - 1) * gap;
+      let groupWidth = totalRectsWidth + totalGaps;
+
+      let startX = x + (w - groupWidth) / 2;
+
+      noStroke();
+
+      let decoColor = color(chosenColorProfile.closeBtn);
+      decoColor.setAlpha(chosenAlpha/1.5);
+      fill(decoColor);
+      let currentX = startX;
+      for (let i = 0; i < numRects; i++) {
+        rect(currentX, decoY, rectWidths[i], decoHeight);
+        currentX += rectWidths[i] + gap;
+      }
+
+    } else if (chosenWindowStyle.name === "commodore") {
+
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+      fill(btnFill);
+      noStroke();
+      rect(x, y, w, h);
+      push();
+        textSize(10 * scaleFactor);
+        fill(chosenColorProfile.borderHi);
+        noStroke();
+        let verticalSpacing = (10 * scaleFactor) + (4 * scaleFactor);
+        for (let posY = y + verticalSpacing / 2; posY < y + h - verticalSpacing / 2; posY += verticalSpacing) {
+          push();
+            translate(x + 6 * scaleFactor, posY);
+            text("||", 0, 0);
+          pop();
+        }
+        for (let posY = y + verticalSpacing / 2; posY < y + h - verticalSpacing / 2; posY += verticalSpacing) {
+          push();
+            translate(x + w - 6 * scaleFactor, posY);
+            text("||", 0, 0);
+          pop();
+        }
+      pop();
+      push();
+        textSize(10 * scaleFactor);
+        textAlign(CENTER, CENTER);
+        fill(chosenColorProfile.borderHi);
+        noStroke();
+        let horizontalSpacing = textWidth("=") + (2 * scaleFactor);
+        for (let posX = x + horizontalSpacing / 2; posX < x + w; posX += horizontalSpacing) {
+          text("=", posX + 4, y - 5 * scaleFactor);
+        }
+        for (let posX = x + horizontalSpacing / 2; posX < x + w; posX += horizontalSpacing) {
+          text("=", posX + 4, y + h - 6 * scaleFactor);
+        }
+      pop();
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(chosenColorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha);
+        stroke(extraC);
+        noFill();
+        rect(x, y, w, h);
+      }
+
+    } else if (chosenWindowStyle.name === "apple_new") {
+
+  let btnFill = color(chosenColorProfile.bgColor);
+  btnFill.setAlpha(chosenAlpha);
+  let shadowOffset = 5 * scaleFactor;
+  let borderColor = color(chosenColorProfile.borderHi);
+  borderColor.setAlpha(chosenAlpha);
+  let r = 10 * scaleFactor;  
+
+  noStroke();
+  fill(lerpColor(btnFill, color(0), 0.3));
+
+  rect(x + shadowOffset, y + shadowOffset, w, h, r);
+
+  strokeWeight(2 * scaleFactor);
+  stroke(borderColor);
+  fill(btnFill);
+
+  rect(x, y, w, h, r);
+
+  if (chosenBorderWeight > 0) {
+    strokeWeight(chosenBorderWeight);
+    let extraC = color(chosenColorProfile.extraBorderColor);
+    extraC.setAlpha(chosenAlpha);
+    stroke(extraC);
+    noFill();
+
+    rect(x, y, w, h, r);
+  }
+}
+ else {
+
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+      fill(btnFill);
+      noStroke();
+      rect(x, y, w, h);
+
+      strokeWeight(1.5 * scaleFactor);
+      let btnStCol = color(chosenColorProfile.borderHi)
+      btnStCol.setAlpha(map(chosenAlpha, 50, 150, 50, 130)); 
+      stroke(btnStCol);
+      noFill();
+      rect(x, y, w, h);
+
+      let borderLoCol = color(chosenColorProfile.borderLo);
+      borderLoCol.setAlpha(map(chosenAlpha, 50, 150, 40, 130)); 
+      stroke(borderLoCol);
+      line(x + w, y, x + w, y + h);
+      line(x, y + h, x + w, y + h);
+
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(chosenColorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha);
+        stroke(extraC);
+        noFill();
+        rect(x, y, w, h);
+      }
+    }
+  pop();
+}
+
+function drawWindowsButtons() {
+
+  for (let btn of windowsButtonsData) {
+    drawWindowsButton(btn.x, btn.y, btn.btnW, btn.btnH);
+  }
+}
+
+function drawNestedWindows() {
+  push();
+
+  if (nestedWindowsData && nestedWindowsData.length > 0) {
+    for (let win of nestedWindowsData) {
+      drawWindowStyle(win.centerX, win.centerY, win.w, win.h, chosenColorProfile, win.titleBarHeight, win.iconSize, false);
+    }
+  }
+  pop();
+}
+
+function computeNestedWindowsData() {
+  let data = [];
+  let leftMargin, rightMargin, topMargin, bottomMargin;
+  if (chosenBordiEffect && chosenBordiEffect.name === "scrollBars") {
+    if (verticalScrollBarPosition === "left") {
+      leftMargin = 20 * scaleFactor;
+      rightMargin = random(0, 50);
+    } else {
+      rightMargin = 20 * scaleFactor;
+      leftMargin = random(0, 50);
+    }
+    if (horizontalScrollBarPosition === "top") {
+      topMargin = 20 * scaleFactor;
+      bottomMargin = random(0, 50);
+    } else {
+      bottomMargin = 20 * scaleFactor;
+      topMargin = random(0, 50);
+    }
+  } else {
+    leftMargin = random(0, 50);
+    rightMargin = random(0, 50);
+    topMargin = random(0, 50);
+    bottomMargin = random(0, 50);
+  }
+
+  let prevX = leftMargin;
+  let prevY = topMargin;
+  let prevW = width - (leftMargin + rightMargin);
+  let prevH = height - (topMargin + bottomMargin);
+  let nestedTitleBarH = (15 + random(10)) * scaleFactor;
+  let centerX = prevX + prevW / 2;
+  let centerY = prevY + prevH / 2;
+  let iconSz = prevW * 0.2;
+
+  data.push({
+    centerX: centerX,
+    centerY: centerY,
+    w: prevW,
+    h: prevH,
+    titleBarHeight: nestedTitleBarH,
+    iconSize: iconSz
+  });
+
+  let numWindows = floor(random(4, 4)); 
+  for (let i = 1; i < numWindows; i++) {
+    let marginX, marginY;
+    if (i === 1) {
+      marginX = random(30, 50);
+      marginY = random(30, 50);
+    } else {
+      marginX = random(40, min(100, prevW / 2));
+      marginY = random(40, min(100, prevH / 2));
+    }
+    let newW = prevW - 2 * marginX;
+    let newH = prevH - 2 * marginY;
+    let availableX = prevW - newW;
+    let availableY = prevH - newH;
+    let offsetX = random(0, availableX);
+    let offsetY = random(0, availableY);
+    let newX = prevX + offsetX;
+    let newY = prevY + offsetY;
+    let newCenterX = newX + newW / 2;
+    let newCenterY = newY + newH / 2;
+    let newIconSz = newW * 0.13;
+
+    data.push({
+      centerX: newCenterX,
+      centerY: newCenterY,
+      w: newW,
+      h: newH,
+      titleBarHeight: nestedTitleBarH,
+      iconSize: newIconSz
+    });
+
+    prevX = newX;
+    prevY = newY;
+    prevW = newW;
+    prevH = newH;
+  }
+
+  return data;
+}
+
+function drawAsciiArtBackground(pg) {
+
+  const densityGradient = "\":;Il!i~+-?][}{01)(|\\/*tfjrxnuvczXSUIDDIESJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+  let cellSize = 20;      
+  let noiseScale = 0.01;  
+
+  let colorA = color(chosenColorProfile.bckstyle1);
+  let colorB = color(chosenColorProfile.bckstyle2);
+
+  pg.textAlign(CENTER, CENTER);
+  pg.textFont("Courier New");
+
+  for (let y = 0; y < pg.height; y += cellSize) {
+    for (let x = 0; x < pg.width; x += cellSize) {
+
+      let n = noise(x * noiseScale, y * noiseScale);
+
+      let idx = floor(map(n, 0, 1, 0, densityGradient.length));
+      idx = constrain(idx, 0, densityGradient.length - 1);
+      let charToDraw = densityGradient.charAt(idx);
+
+      let fillColor = lerpColor(colorA, colorB, n);
+      let fontColor = lerpColor(colorB, colorA, n);
+
+      pg.stroke(255);
+      pg.strokeWeight(0.5);
+      pg.noFill();
+      pg.rect(x, y, cellSize, cellSize);
+
+      pg.noStroke();
+      pg.fill(fillColor);
+      let fillSize = cellSize * 0.85;
+      let offset = (cellSize - fillSize) / 2;
+      pg.rect(x + offset, y + offset, fillSize, fillSize);
+
+      pg.fill(fontColor);
+      pg.noStroke();
+      pg.textSize(cellSize * 0.8);
+      pg.text(charToDraw, x + cellSize / 2, y + cellSize / 2);
+    }
+  }
+}
+
+function drawButtonBase(x, y, w, h) {
+  push();
+    if (chosenWindowStyle.name === "win98") {
+      translate(x, y);
+      strokeWeight(2 * scaleFactor);
+
+      let bg = color(chosenColorProfile.bgColor);
+      bg.setAlpha(chosenAlpha);
+      fill(bg);
+
+      let borderHiCol = color(chosenColorProfile.borderHi);
+      borderHiCol.setAlpha(chosenAlpha);
+      let borderLoCol = color(chosenColorProfile.borderLo);
+      borderLoCol.setAlpha(chosenAlpha);
+
+      stroke(borderHiCol);
+      rect(0, 0, w, h);
+
+      stroke(borderLoCol);
+      line(w, 0, w, h);
+      line(0, h, w, h);
+
+    } else if (chosenWindowStyle.name === "appleLisa") {
+      translate(x, y);
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+
+      let borderColor = color(chosenColorProfile.borderHi);
+      borderColor.setAlpha(chosenAlpha * 0.5);
+
+      let shadowOffset = 5 * scaleFactor;
+      noStroke();
+      let shadowColor = lerpColor(btnFill, color(0), 0.3);
+      fill(shadowColor);
+      rect(shadowOffset, shadowOffset, w, h);
+
+      strokeWeight(1 * scaleFactor);
+      stroke(borderColor);
+      fill(btnFill);
+      rect(0, 0, w, h);
+
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(chosenColorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha * 0.3);
+        stroke(extraC);
+        noFill();
+        rect(0, 0, w, h);
+      }
+
+    } else if (chosenWindowStyle.name === "commodore") {
+      translate(x, y);
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+      fill(btnFill);
+      noStroke();
+      rect(0, 0, w, h);
+
+      strokeWeight(1 * scaleFactor);
+
+      let borderHiCol = color(chosenColorProfile.borderHi);
+      borderHiCol.setAlpha(chosenAlpha);
+      stroke(borderHiCol);
+      noFill();
+      rect(0, 0, w, h);
+
+    } else if (chosenWindowStyle.name === "windows2") {
+      translate(x, y);
+      noStroke();
+      let bgColor = color(chosenColorProfile.bgColor);
+      bgColor.setAlpha(chosenAlpha);
+      fill(bgColor);
+      rect(0, 0, w, h);
+
+      strokeWeight(3 * scaleFactor);
+      let borderHiCol = color(chosenColorProfile.borderHi);
+      borderHiCol.setAlpha(chosenAlpha);
+      stroke(borderHiCol);
+      noFill();
+      rect(0, 0, w, h);
+
+    } else if (chosenWindowStyle.name === "apple_new") {
+      translate(x, y);
+      let btnFill = color(chosenColorProfile.bgColor);
+      btnFill.setAlpha(chosenAlpha);
+      let shadowOffset = 5 * scaleFactor;
+      let borderColor = color(chosenColorProfile.borderHi);
+      borderColor.setAlpha(chosenAlpha);
+      noStroke();
+      fill(lerpColor(btnFill, color(0), 0.3));
+      rect(shadowOffset, shadowOffset, w, h, 10 * scaleFactor);
+
+      strokeWeight(2 * scaleFactor);
+      stroke(borderColor);
+      fill(btnFill);
+      rect(0, 0, w, h, 10 * scaleFactor);
+
+      if (chosenBorderWeight > 0) {
+        strokeWeight(chosenBorderWeight);
+        let extraC = color(chosenColorProfile.extraBorderColor);
+        extraC.setAlpha(chosenAlpha);
+        stroke(extraC);
+        noFill();
+        rect(0, 0, w, h, 10 * scaleFactor);
+      }
+
+    } else {
+      translate(x, y);
+      noStroke();
+      let bg = color(chosenColorProfile.bgColor);
+      bg.setAlpha(chosenAlpha);
+      fill(bg);
+      rect(0, 0, w, h);
+
+      strokeWeight(2 * scaleFactor);
+      let borderHiCol = color(chosenColorProfile.borderHi);
+      borderHiCol.setAlpha(chosenAlpha);
+      stroke(borderHiCol);
+      noFill();
+      rect(0, 0, w, h);
+    }
+  pop();
+}
+
+function errorTile(x, y, w, h) {
+  push();
+
+    drawButtonBase(x, y, w, h);
+
+    let diameter = 0.7 * min(w, h);
+
+    let marginX = 0.1 * w;
+    let marginY = 0.1 * h;
+
+    let cx = x + marginX + diameter / 2;
+    let cy = y + marginY + diameter / 2;
+
+    let pixelSize = diameter / 50;  
+    let mappedAlpha = map(chosenAlpha, 50, 150, 50, 155);
+    let circleColor = color(chosenColorProfile.bodyElement2);
+    circleColor.setAlpha(mappedAlpha);
+
+    for (let i = -diameter/2; i < diameter/2; i += pixelSize) {
+      for (let j = -diameter/2; j < diameter/2; j += pixelSize) {
+        if (dist(0, 0, i, j) < diameter/2) {
+          fill(circleColor);
+          noStroke();
+          rect(cx + i, cy + j, pixelSize, pixelSize);
+        }
+      }
+    }
+
+    let pattern = [
+      "..........",
+      ".XX....XX.",
+      ".X......X.",
+      "...X..X...",
+      "....XX....",
+      "....XX....",
+      "...X..X...",
+      ".X......X.",
+      ".XX....XX.",
+      ".........."
+    ];
+
+    let patternPixelSize = (0.8 * diameter) / pattern[0].length;
+    let patternWidth = pattern[0].length * patternPixelSize;
+    let patternHeight = pattern.length * patternPixelSize;
+
+    let startX = cx - patternWidth / 2;
+    let startY = cy - patternHeight / 2;
+
+    fill(chosenColorProfile.bgColor); 
+    noStroke();
+    for (let row = 0; row < pattern.length; row++) {
+      for (let col = 0; col < pattern[row].length; col++) {
+        if (pattern[row][col] === 'X') {
+          rect(startX + col * patternPixelSize, startY + row * patternPixelSize, patternPixelSize, patternPixelSize);
+        }
+      }
+    }
+  pop();
+}
+
+function computeEditWindowsData() {
+
+  if (editWindowsData.length > 0) {
+    return editWindowsData;
+  }
+
+  for (let i = 0; i < 8; i++) {
+
+    let w = random(150, 300) * scaleFactor;
+    let h = random(150, 300) * scaleFactor;
+
+    let x = random(w / 2, width - w / 2);
+    let y = random(h / 2, height - h / 2);
+
+    let titleBarHeight = random(15, 25) * scaleFactor;
+    let iconSize = random(10, 20) * scaleFactor;
+
+    editWindowsData.push({
+      centerX: x,
+      centerY: y,
+      w: w,
+      h: h,
+      titleBarHeight: titleBarHeight,
+      iconSize: iconSize
+    });
+  }
+  return editWindowsData;
+}
+
+function drawEditWindows() {
+  let windows = computeEditWindowsData();
+  for (let win of windows) {
+
+    drawWindowStyle(
+      win.centerX,
+      win.centerY,
+      win.w,
+      win.h,
+      chosenColorProfile,
+      win.titleBarHeight,
+      win.iconSize,
+      false  
+    );
+    push();
+
+      translate(win.centerX - win.w / 2, win.centerY - win.h / 2);
+
+      drawEditWindowBodyWithHole(0, win.titleBarHeight, win.w, win.h - win.titleBarHeight, chosenColorProfile);
+    pop();
+  }
+}
+
+function drawEditWindowBodyWithHole(x, y, w, h, colorProfile) {
+  push();
+    if (chosenWindowStyle.name === "apple_new") {
+
+      let r = 10 * scaleFactor;             
+      let margin = 0.05 * min(w, h);          
+      let holeX = x + margin;
+      let holeY = y + margin;
+      let holeW = w - 2 * margin;
+      let holeH = h - 2 * margin;
+
+      let mappedAlpha = map(chosenAlpha, 50, 150, 150, 255);
+
+      noFill();
+
+      drawInvertedWindowBorderStyle(holeX, holeY, holeW, holeH, colorProfile, mappedAlpha);
+
+    } else if (chosenWindowStyle.name === "win2") {
+
+      let mappedAlpha = map(chosenAlpha, 50, 150, 50, 150);
+
+      let margin = 0.05 * min(w, h);
+      let holeX = x + margin;
+      let holeY = y + margin;
+      let holeW = w - 2 * margin;
+      let holeH = h - 2 * margin;
+
+      let bodyColor = color(colorProfile.bgColor);
+      bodyColor.setAlpha(mappedAlpha);
+      noStroke();
+      fill(bodyColor);
+
+      rect(x, y, w, holeY - y);
+
+      rect(x, holeY + holeH, w, (y + h) - (holeY + holeH));
+
+      rect(x, holeY, holeX - x, holeH);
+
+      rect(holeX + holeW, holeY, (x + w) - (holeX + holeW), holeH);
+
+      drawInvertedWindowBorderStyle(holeX, holeY, holeW, holeH, colorProfile, mappedAlpha);
+
+    } else {
+
+      let mappedAlpha = map(chosenAlpha, 50, 150, 50, 155);
+
+      let margin = 0.05 * min(w, h);
+      let holeX = x + margin;
+      let holeY = y + margin;
+      let holeW = w - 2 * margin;
+      let holeH = h - 2 * margin;
+
+      let bodyColor = color(colorProfile.bgColor);
+      bodyColor.setAlpha(mappedAlpha);
+      noStroke();
+      fill(bodyColor);
+
+      rect(x, y, w, holeY - y);
+      rect(x, holeY + holeH, w, (y + h) - (holeY + holeH));
+      rect(x, holeY, holeX - x, holeH);
+      rect(holeX + holeW, holeY, (x + w) - (holeX + holeW), holeH);
+
+      drawInvertedWindowBorderStyle(holeX, holeY, holeW, holeH, colorProfile, mappedAlpha);
+    }
+  pop();
+}
+
+function drawInvertedWindowBorderStyle(x, y, w, h, colorProfile, alphaValue) {
+  if (chosenWindowStyle.name === "win98") {
+    strokeWeight(2 * scaleFactor);
+    stroke(color(colorProfile.borderLo));
+    noFill();
+    rect(x, y, w, h);
+    stroke(color(colorProfile.borderHi));
+    line(x + w, y, x + w, y + h);
+    line(x, y + h, x + w, y + h);
+    if (chosenBorderWeight > 0) {
+      strokeWeight(chosenBorderWeight);
+      let extraC = color(colorProfile.extraBorderColor);
+      extraC.setAlpha(alphaValue);
+      stroke(extraC);
+      noFill();
+      rect(x, y, w, h);
+    }
+  } else if (chosenWindowStyle.name === "appleLisa") {
+    strokeWeight(chosenBorderWeight > 0 ? chosenBorderWeight : (2 * scaleFactor));
+    let borderColor = color(colorProfile.borderLo);
+    borderColor.setAlpha(alphaValue);
+    stroke(borderColor);
+    noFill();
+    rect(x, y, w, h);
+  } else if (chosenWindowStyle.name === "commodore") {
+    strokeWeight(1 * scaleFactor);
+    stroke(color(colorProfile.borderLo));
+    noFill();
+    rect(x, y, w, h);
+  } else if (chosenWindowStyle.name === "apple_new") {
+    let r = 10 * scaleFactor;
+    strokeWeight(4 * scaleFactor);
+    let borderColor = color(colorProfile.borderLo);
+    borderColor.setAlpha(alphaValue);
+    stroke(borderColor);
+    noFill();
+    rect(x, y, w, h, r);
+  } else if (chosenWindowStyle.name === "win2") {
+
+    strokeWeight(2 * scaleFactor);
+    let borderColor = color(colorProfile.borderLo);
+    borderColor.setAlpha(alphaValue);
+    stroke(borderColor);
+    noFill();
+    rect(x, y, w, h);
+  } else {
+    strokeWeight(2 * scaleFactor);
+    stroke(color(colorProfile.borderLo));
+    noFill();
+    rect(x, y, w, h);
+  }
+}
+
+function drawBlueScreen() {
+
+  background(chosenColorProfile.sod);
+
+  let pg = createGraphics(width, height);
+  pg.pixelDensity(1);
+  pg.background(0, 0); 
+  pg.textFont("Courier New");
+
+  let ts = 26 * scaleFactor;
+  pg.textSize(ts);
+  pg.textAlign(CENTER, CENTER);
+
+  pg.fill(chosenColorProfile.sotText);
+
+  let message = "An unexpected error has been detected on your Bitcoin node. To safeguard the blockchain’s integrity, operations have been temporarily suspended.\n\n" +
+                "If this is the first occurrence, please restart your node.\n\n" +
+                "If the error persists, please follow these steps:\n" +
+                "Verify that any newly added nodes have been correctly installed and check for any malicious software .\n\n" +
+                "Technical Information:\n" +
+                "*** RESTART REQUIRED:***\nblock #0 ";
+
+  pg.text(message, width * 0.1, height * 0.1, width * 0.8, height * 0.8);
+
+  pg.filter(BLUR, 1);
+
+  image(pg, 0, 0);
+
+  push();
+    tint(255, 100, 100, 150);
+    image(pg, redOffsetX, redOffsetY);
+  pop();
+
+  push();
+    tint(100, 100, 255, 150);
+    image(pg, blueOffsetX, blueOffsetY);
+  pop();
+}
+
+function drawButtonSpectrum() {
+  for (let btn of buttonSpectrumData) {
+
+    let pg = createGraphics(btn.btnW, btn.btnH);
+    pg.pixelDensity(1);
+
+    let r = sqrt((btn.btnW/2) ** 2 + (btn.btnH/2) ** 2);
+
+    drawHorizontalColorWheelCustom(pg, btn.btnW/2, btn.btnH/2, r);
+
+    push();
+      strokeWeight(chosenBorderWeight > 0 ? chosenBorderWeight : (2 * scaleFactor));
+      stroke(chosenColorProfile.borderHi);
+      noFill();
+      rect(btn.btnX, btn.btnY, btn.btnW, btn.btnH);
+    pop();
+
+    image(pg, btn.btnX, btn.btnY);
+  }
+}
+
+function drawHorizontalColorWheelCustom(pg, cx, cy, r) {
+  pg.push();
+  pg.translate(cx, cy);
+  colorMode(HSB, 360, 100, 100);
+
+  let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+  let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+
+  let titleHue = hue(color(chosenColorProfile.titleBar));
+
+  pg.noStroke();
+  for (let x = -r; x <= r; x++) {
+    let factor = (x + r) / (2 * r);
+
+    let baseHue = map(factor, 0, 1, 0, 360);
+
+    let hueVal = (0.5 * baseHue + 0.5 * titleHue) % 360;
+
+    let yExtent = sqrt(r * r - x * x);
+    let c = color(hueVal, effectiveSat, effectiveBright);
+    c.setAlpha(chosenAlpha);
+    pg.fill(c);
+    pg.noStroke();
+    pg.rect(x, -yExtent, 1, 2 * yExtent);
+  }
+  colorMode(RGB, 255);
+  pg.pop();
+}
+
+function computeIrregularGridCells() {
+
+  let minSize = random(40, 100) * scaleFactor;
+
+  let initialRect = { x: 0, y: 0, width: width, height: height };
+
+  let cells = subdivideRect(initialRect, minSize, minSize);
+
+}
+
+function drawIrregularGrid() {
+  let gap = 4 * scaleFactor;
+  noStroke();
+  for (let cell of irregularGridCells) {
+    let fillColor = color(chosenColorProfile.sod);
+    let mappedFillAlpha = map(chosenAlpha, 50, 150, 80, 155);
+    fillColor.setAlpha(mappedFillAlpha);
+    fill(fillColor);
+    rect(cell.x + gap, cell.y + gap, cell.width - 2 * gap, cell.height - 2 * gap);
+  }
+}
+
+function subdivideRect(rect, minW, minH) {
+  let cells = [];
+
+  if (rect.width > 2 * minW || rect.height > 2 * minH) {
+
+    let splitVertically = random() < 0.5;
+
+    if (splitVertically && rect.width > 2 * minW) {
+
+      let splitX = random(rect.x + minW, rect.x + rect.width - minW);
+      let leftRect = { x: rect.x, y: rect.y, width: splitX - rect.x, height: rect.height };
+      let rightRect = { x: splitX, y: rect.y, width: rect.x + rect.width - splitX, height: rect.height };
+      cells = cells.concat(subdivideRect(leftRect, minW, minH));
+      cells = cells.concat(subdivideRect(rightRect, minW, minH));
+    } 
+
+    else if (rect.height > 2 * minH) {
+      let splitY = random(rect.y + minH, rect.y + rect.height - minH);
+      let topRect = { x: rect.x, y: rect.y, width: rect.width, height: splitY - rect.y };
+      let bottomRect = { x: rect.x, y: splitY, width: rect.width, height: rect.y + rect.height - splitY };
+      cells = cells.concat(subdivideRect(topRect, minW, minH));
+      cells = cells.concat(subdivideRect(bottomRect, minW, minH));
+    } else {
+
+      cells.push(rect);
+    }
+  } else {
+
+    cells.push(rect);
+  }
+  return cells;
+}
+
+function drawGradientRect3(x, y, w, h, col1, col2, col3) {
+  noFill();
+
+  for (let i = 0; i < h; i++) {
+    let t = map(i, 0, h, 0, 1);
+    let c;
+
+    if (t < 0.5) {
+      c = lerpColor(col1, col2, t * 2);
+    } 
+
+    else {
+      c = lerpColor(col2, col3, (t - 0.5) * 2);
+    }
+    stroke(c);
+    line(x, y + i, x + w, y + i);
+  }
+}
+
+function createGradientImage(w, h, col1, col2, col3) {
+  let pg = createGraphics(w, h);
+  pg.pixelDensity(1);
+  pg.noFill();
+
+  for (let i = 0; i < h; i++) {
+    let t = map(i, 0, h, 0, 1);
+    let c;
+    if (t < 0.5) {
+
+      c = lerpColor(col1, col2, t * 2);
+    } else {
+
+      c = lerpColor(col2, col3, (t - 0.5) * 2);
+    }
+    pg.stroke(c);
+    pg.line(0, i, w, i);
+  }
+  return pg;
+}
+
+function drawIrregularGridGradient() {
+
+  image(gradImageGlobal, 0, 0);
+
+  let strokeW = (50 * scaleFactor) / 8;
+  let mappedStrokeAlpha = map(chosenAlpha, 50, 150, 50, 100);
+  let strokeColor = color(chosenColorProfile.sotText);
+  strokeColor.setAlpha(mappedStrokeAlpha);
+  stroke(strokeColor);
+  strokeWeight(strokeW);
+  noFill();
+
+  for (let cell of irregularGridCells) {
+    rect(cell.x, cell.y, cell.width, cell.height);
+  }
+}
+function drawSquareWheels(cx, cy, side) {
+  push();
+
+    translate(cx - side / 2, cy - side / 2);
+    colorMode(HSB, 360, 100, 100);
+
+    let effectiveSat = map(chosenAlpha, 50, 150, 40, 60);
+    let effectiveBright = map(chosenAlpha, 50, 150, 50, 80);
+    noStroke();
+
+    for (let x = 0; x < side; x++) {
+      let factor = x / side;  
+      let hueVal;
+      if (factor < 0.5) {
+        hueVal = lerp(winSpectrumH1, winSpectrumH2, factor * 2);
+      } else {
+        hueVal = lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2);
+      }
+      let c = color(hueVal, effectiveSat, effectiveBright);
+      c.setAlpha(chosenAlpha);
+      fill(c);
+
+      rect(x, 0, 1, side);
+    }
+    colorMode(RGB, 255);
+  pop();
+}
+
+function drawWindowsSquareBorder(cx, cy, side) {
+  push();
+
+    rectMode(CENTER);
+
+    strokeWeight(2 * scaleFactor);
+    let borderColor = color(chosenColorProfile.borderHi);
+    borderColor.setAlpha(chosenAlpha);
+    stroke(borderColor);
+    noFill();
+    rect(cx, cy, side, side);
+
+    if (chosenBorderWeight > 0) {
+      strokeWeight(chosenBorderWeight);
+      let extraC = color(chosenColorProfile.extraBorderColor);
+      extraC.setAlpha(chosenAlpha);
+      stroke(extraC);
+      noFill();
+      rect(cx, cy, side, side);
+    }
+  pop();
+}
+
+function drawColumnWheelsFromParams(params) {
+  push();
+    colorMode(HSB, 360, 100, 100);
+    let currentX = params.startX;
+    for (let i = 0; i < params.nColumns; i++) {
+      let colWidth = params.widths[i];
+      push();
+
+        translate(currentX, params.startY);
+
+        for (let xCol = 0; xCol < colWidth; xCol++) {
+          let factor = xCol / colWidth;
+          let hueVal = (factor < 0.5) ?
+            lerp(winSpectrumH1, winSpectrumH2, factor * 2) :
+            lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2);
+          let c = color(hueVal, 50, 60);
+          c.setAlpha(chosenAlpha);
+          fill(c);
+          noStroke();
+          rect(xCol, 0, 1, params.colHeight);
+        }
+
+        noFill();
+        strokeWeight(2 * scaleFactor);
+        let borderC = color(chosenColorProfile.borderHi);
+        borderC.setAlpha(chosenAlpha);
+        stroke(borderC);
+        rect(0, 0, colWidth, params.colHeight);
+      pop();
+
+      currentX += colWidth;
+      if (i < params.nColumns - 1) {
+        currentX += params.gaps[i];
+      }
+    }
+    colorMode(RGB, 255);
+  pop();
+}
+
+function drawColumnWheelsBorder(params) {
+  push();
+
+    let centerX = width / 2;
+    let centerY = params.startY + params.colHeight / 2;
+    strokeWeight(0);
+    let borderC = color(chosenColorProfile.extraBorderColor || chosenColorProfile.borderHi);
+    borderC.setAlpha(chosenAlpha);
+    stroke(borderC);
+    noFill();
+    rectMode(CENTER);
+    rect(centerX, centerY, params.totalWidth, params.colHeight);
+    rectMode(CORNER);
+  pop();
+}
+function computeColumnWheelsParams() {
+
+  let nColumns = int(random(4, 8));
+  let widths = [];
+  let gaps = [];
+
+  for (let i = 0; i < nColumns; i++) {
+    widths.push(random(50, 100) * scaleFactor);
+  }
+
+  for (let i = 0; i < nColumns - 1; i++) {
+    gaps.push(random(20, 50) * scaleFactor);
+  }
+
+  let totalColumnsWidth = widths.reduce((sum, w) => sum + w, 0);
+  let totalGapsWidth = gaps.reduce((sum, gap) => sum + gap, 0);
+  let totalWidth = totalColumnsWidth + totalGapsWidth;
+
+  let startX = (width - totalWidth) / 2;
+
+  let colHeight = 800 * scaleFactor;
+  let startY = (height - colHeight) / 2;
+
+  return { nColumns, widths, gaps, totalWidth, startX, colHeight, startY };
+}
+
+function computeRowWheelsParams() {
+
+  let nRows = int(random(4, 8));
+  let heights = [];
+  let gaps = [];
+
+  for (let i = 0; i < nRows; i++) {
+    heights.push(random(50, 100) * scaleFactor);
+  }
+
+  for (let i = 0; i < nRows - 1; i++) {
+    gaps.push(random(20, 50) * scaleFactor);
+  }
+
+  let totalRowsHeight = heights.reduce((sum, h) => sum + h, 0);
+  let totalGapsHeight = gaps.reduce((sum, gap) => sum + gap, 0);
+  let totalHeight = totalRowsHeight + totalGapsHeight;
+
+  let startY = (height - totalHeight) / 2;
+
+  let rowWidth = 800 * scaleFactor;
+  let startX = (width - rowWidth) / 2;
+
+  return { nRows, heights, gaps, totalHeight, startY, rowWidth, startX };
+}
+
+function drawRowWheelsFromParams(params) {
+  push();
+    colorMode(HSB, 360, 100, 100);
+    let currentY = params.startY;
+    for (let i = 0; i < params.nRows; i++) {
+      let rHeight = params.heights[i];
+      push();
+        translate(params.startX, currentY);
+
+        for (let yRow = 0; yRow < rHeight; yRow++) {
+          let factor = yRow / rHeight;
+          let hueVal = (factor < 0.5) ?
+            lerp(winSpectrumH1, winSpectrumH2, factor * 2) :
+            lerp(winSpectrumH2, winSpectrumH3, (factor - 0.5) * 2);
+          let c = color(hueVal, 50, 50);
+          c.setAlpha(chosenAlpha);
+          fill(c);
+          noStroke();
+          rect(0, yRow, params.rowWidth, 1);
+        }
+
+        noFill();
+        strokeWeight(2 * scaleFactor);
+        let borderC = color(chosenColorProfile.borderHi);
+        borderC.setAlpha(chosenAlpha);
+        stroke(borderC);
+        rect(0, 0, params.rowWidth, rHeight);
+      pop();
+      currentY += rHeight;
+      if (i < params.nRows - 1) {
+        currentY += params.gaps[i];
+      }
+    }
+    colorMode(RGB, 255);
+  pop();
+}
+
+function drawRowWheelsBorder(params) {
+  push();
+    let centerX = params.startX + params.rowWidth / 2;
+    let centerY = height / 2;
+    strokeWeight(0 );
+    let borderC = color(chosenColorProfile.extraBorderColor || chosenColorProfile.borderHi);
+    borderC.setAlpha(chosenAlpha);
+    stroke(borderC);
+    noFill();
+    rectMode(CENTER);
+    rect(centerX, centerY, params.rowWidth, params.totalHeight);
+    rectMode(CORNER);
+  pop();
+}
+
+function applyLineTextEffect(centerX, centerY, w, h, effectData) {
+
+  let x = centerX - w / 2;
+  let y = centerY - h / 2;
+
+  let lineX = x + 10 * scaleFactor;
+  let lineY = random(y, y + h);
+
+  let lineY2 = lineY + effectData.lineTextOffset * scaleFactor * 1.8;
+
+  let lineColor = color(chosenColorProfile.borderHi);
+  lineColor.setAlpha(chosenAlpha);
+
+  push();
+    stroke(lineColor);
+    strokeWeight(2 * scaleFactor);
+    line(lineX, lineY, lineX, lineY2);
+  pop();
+
+  let textPhrase = selectedPhrase;
+  if (textPhrase.indexOf('\n') !== -1) {
+    textPhrase = textPhrase.split('\n')[0];
+  }
+
+  if (!window.selectedPhraseLogged) {
+    window.selectedPhraseLogged = true;
+  }
+
+  let textX = lineX + 5 * scaleFactor;
+  let textSizeVal = 12 * scaleFactor;
+  let textY = lineY2;
+
+  push();
+    textSize(textSizeVal);
+    textAlign(LEFT, TOP);
+    let txtStroke = lineColor;
+    noFill();
+    stroke(txtStroke);
+    strokeWeight(0.7 * scaleFactor);
+    drawingContext.font = `${textSizeVal}px Courier New`;
+    if (effectData.lineTextOffset > 0) {
+      drawingContext.textBaseline = "bottom";
+    } else {
+      drawingContext.textBaseline = "top";
+    }
+    drawingContext.strokeText(textPhrase, textX, textY);
+  pop();
+}
+
+function drawTron() {
+
+  if (!tronParams) {
+    tronParams = computeTronParams();
+  }
+
+  let focusX = tronParams.focusX;
+  let focusY = tronParams.focusY;
+  let numRays = tronParams.numRays;
+  let rayThickness = tronParams.rayThickness;
+  let rayLength = tronParams.rayLength;
+  let minAngle = tronParams.minAngle;
+  let maxAngle = tronParams.maxAngle;
+
+  let baseColor = color(chosenColorProfile.bckstyle2);
+  baseColor.setAlpha(chosenAlpha);
+
+  for (let i = 0; i < numRays; i++) {
+    let fraction = i / (numRays - 1);
+    let angle = lerp(minAngle, maxAngle, fraction);
+
+    let rayColor = baseColor;
+
+    push();
+      translate(focusX, focusY);
+      rotate(angle);
+
+      noStroke();
+      fill(rayColor);
+      rect(0, -rayThickness / 2, rayLength, rayThickness);
+
+      noFill();
+      strokeWeight(2 * scaleFactor);
+      let borderC = color(chosenColorProfile.borderHi);
+      borderC.setAlpha(chosenAlpha);
+      stroke(borderC);
+      rect(0, -rayThickness / 2, rayLength, rayThickness);
+    pop();
+  }
+}
+
+function computeTronParams() {
+  let params = {};
+
+  params.focusX = -500 * scaleFactor;
+
+  params.focusY = random(height);
+
+  params.numRays = 20;
+  params.rayThickness =10; 
+
+  params.angleTL = atan2(0 - params.focusY, 0 - params.focusX);
+  params.angleTR = atan2(0 - params.focusY, width - params.focusX);
+  params.angleBR = atan2(height - params.focusY, width - params.focusX);
+  params.angleBL = atan2(height - params.focusY, 0 - params.focusX);
+
+  params.minAngle = min(params.angleTL, params.angleTR, params.angleBR, params.angleBL);
+  params.maxAngle = max(params.angleTL, params.angleTR, params.angleBR, params.angleBL);
+
+  let dTL = dist(params.focusX, params.focusY, 0, 0);
+  let dTR = dist(params.focusX, params.focusY, width, 0);
+  let dBR = dist(params.focusX, params.focusY, width, height);
+  let dBL = dist(params.focusX, params.focusY, 0, height);
+  params.maxD = max(dTL, dTR, dBR, dBL);
+  params.rayLength = params.maxD + 50;
+
+  return params;
+}
+  </script>
+</html>

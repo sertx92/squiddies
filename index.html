@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Squiddies</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <div class="filter-window">
+      <button id="toggle-filters" class="toggle-btn">Show Filters</button>
+      <div id="filters-container" style="display: none;">
+        <div id="filters"></div>
+      </div>
+    </div>
+    <div class="window">
+      <div class="window-titlebar">
+        <span>SQUIDDIES</span>
+        <div class="close-btn">X</div>
+      </div>
+      <div class="window-content">
+        <div class="search-container">
+          <input type="text" id="search" placeholder="Search ID..." />
+          <button id="shuffle">Shuffle</button>
+          <button id="removeFilters">Remove Filters</button>
+        </div>
+        <!-- Contenitore per i filtri attivi -->
+        <div id="activeFiltersContainer"></div>
+        <div class="container" id="container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal per i dettagli -->
+  <div id="detailsModal" class="modal">
+    <div class="window modal-window">
+      <div class="window-titlebar">
+        <span id="modalTitle"></span>
+        <div id="modalClose" class="close-btn">X</div>
+      </div>
+      <div class="window-content">
+        <div class="modal-body">
+          <div class="modal-left">
+            <div class="preview">
+              <iframe id="modalIframe" data-src="" title="Contenuto Squiddies" loading="lazy"></iframe>
+            </div>
+            <button id="modalLink" class="windows-button">Link</button>
+          </div>
+          <div class="modal-right" id="modalDetails">
+            <!-- I metadata verranno inseriti qui -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
